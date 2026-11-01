@@ -1,0 +1,65 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import InsightCard from '../../components/InsightCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { site } from '../../config/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('insights');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+interface Props {
+  post: CollectionEntry<'insights'>;
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const date = post.data.date.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+const more = (await getCollection('insights')).filter((p) => p.id !== post.id).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  author: { '@type': 'Organization', name: site.name },
+  publisher: { '@type': 'Organization', name: site.name },
+};
+---
+
+<Base title={post.data.title} description={post.data.description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
+  <article>
+    <header class="border-b border-line bg-fog-2">
+      <div class="wrap pt-10 pb-14">
+        <Breadcrumbs items={[{ label: 'Insights', href: '/insights/' }, { label: post.data.topic }]} />
+        <div class="mx-auto mt-10 max-w-3xl">
+          <p class="t-label">{post.data.topic}</p>
+          <h1 class="t-h1 mt-4 text-ink">{post.data.title}</h1>
+          <p class="t-lead mt-5 text-steel">{post.data.description}</p>
+          <p class="t-small mt-6 text-steel">
+            <time datetime={post.data.date.toISOString()}>{date}</time>, {post.data.minutes} min read
+          </p>
+        </div>
+      </div>
+    </header>
+    <div class="wrap py-14 md:py-20">
+      <div class="prose-pl mx-auto max-w-3xl">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  <section class="border-t border-line bg-fog-2 py-16">
+    <div class="wrap">
+      <h2 class="t-h2 text-ink">More insights</h2>
+      <div class="mt-10 grid gap-10 md:grid-cols-3">
+        {more.map((p) => <InsightCard post={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>

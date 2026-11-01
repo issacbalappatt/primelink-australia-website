@@ -1,0 +1,254 @@
+---
+import { Icon } from 'astro-icon/components';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import RfqTicket from '../components/RfqTicket.astro';
+import WorldMap from '../components/WorldMap.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import InsightCard from '../components/InsightCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, platforms } from '../config/site';
+import { categories } from '../data/products';
+import { industries } from '../data/industries';
+import { services } from '../data/services';
+import { destinations } from '../data/regions';
+
+const posts = (await getCollection('insights')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+
+const process = [
+  { title: 'Send the part details', text: 'A part number, a nameplate photo or a full spares list. Any format is fine.' },
+  { title: 'We identify and source', text: 'We check each line against maker data and find the best source.' },
+  { title: 'You approve one quote', text: `Price, lead time, origin and documents for every line, usually within ${site.quoteResponse}.` },
+  { title: 'We inspect and deliver', text: 'Parts are checked, documented, packed and shipped to your site or supply base.' },
+];
+
+const docs = [
+  'Certificate of conformity',
+  'IECEx or ATEX certificate',
+  'Routine test report',
+  'Material certificate, EN 10204 3.1',
+  'Certificate of origin',
+  'Packing list and labels',
+];
+---
+
+<Base>
+  <!-- Hero -->
+  <section class="blueprint-dark relative overflow-hidden text-white">
+    <WorldMap variant="faint" class="pointer-events-none absolute top-1/2 -right-[18%] hidden w-[78%] -translate-y-1/2 lg:block" />
+    <div class="wrap relative grid gap-12 pt-14 pb-16 md:pt-20 lg:grid-cols-12 lg:gap-10 lg:pt-24 lg:pb-24">
+      <div class="lg:col-span-7">
+        <h1 class="t-display max-w-[14ch]">HVAC spare parts for oil and gas, delivered to site.</h1>
+        <p class="t-lead mt-6 max-w-xl text-white/75">
+          Compressors, coils, Ex-rated motors, dampers and controls for offshore platforms, FPSOs, LNG plants and refineries. One supplier for every maker, with full documentation.
+        </p>
+
+        <form action="/request-a-quote/" method="get" class="mt-10 max-w-xl" role="search" aria-label="Request a quote by part number">
+          <label for="hero-part" class="text-[0.9rem] font-[560] text-white/85">Start with a part number or a description</label>
+          <div class="mt-2.5 flex flex-col gap-2 sm:flex-row sm:gap-0">
+            <div class="relative flex-1">
+              <Icon name="tabler:search" class="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-steel" aria-hidden="true" />
+              <input
+                id="hero-part"
+                name="part"
+                class="h-14 w-full rounded-[var(--radius-btn)] border-0 bg-white pr-4 pl-12 text-[1.05rem] text-ink placeholder:text-steel-2 focus:shadow-[0_0_0_3px_rgb(255_90_31/0.5)] focus:outline-none sm:rounded-r-none"
+                placeholder="OEM part number or a short description"
+                autocomplete="off"
+              />
+            </div>
+            <button class="btn btn-primary h-14 justify-center px-6 text-[1rem] sm:rounded-l-none">Get a quote</button>
+          </div>
+          <p class="t-small mt-3 text-white/55">
+            Have a full spares list? <a href="/request-a-quote/" class="text-white underline decoration-white/40 underline-offset-4 hover:decoration-white">Send the whole list</a>.
+          </p>
+        </form>
+      </div>
+
+      <div class="lg:col-span-5 lg:pl-6">
+        <RfqTicket />
+      </div>
+    </div>
+
+    <div class="relative border-t border-line-dark">
+      <ul class="wrap grid gap-5 py-6 text-[0.925rem] text-white/75 md:grid-cols-3">
+        <li class="flex gap-3"><Icon name="tabler:shield-check" class="mt-0.5 size-5 shrink-0 text-air" aria-hidden="true" />Ex parts checked against your area classification</li>
+        <li class="flex gap-3"><Icon name="tabler:file-certificate" class="mt-0.5 size-5 shrink-0 text-air" aria-hidden="true" />A complete document pack with every order</li>
+        <li class="flex gap-3"><Icon name="tabler:ship" class="mt-0.5 size-5 shrink-0 text-air" aria-hidden="true" />Delivery to plants, supply bases and vessel agents</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Makes -->
+  <section class="border-b border-line">
+    <div class="wrap flex flex-col gap-5 py-8 lg:flex-row lg:items-center lg:gap-12">
+      <p class="t-small shrink-0 font-[560] text-steel lg:w-48">We source parts for equipment from</p>
+      <ul class="flex flex-wrap gap-x-7 gap-y-2 text-[1.05rem] font-[620] text-ink/55" style="font-stretch:110%">
+        {platforms.map((p) => <li>{p}</li>)}
+        <li class="font-[500] text-steel" style="font-stretch:100%">and many more</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section class="py-20 md:py-28">
+    <div class="wrap">
+      <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div class="max-w-2xl">
+          <h2 class="t-h2 text-ink">Parts for every part of the HVAC system</h2>
+          <p class="t-lead mt-4 text-steel">From the compressor to the last damper actuator. If it is in your HVAC system, we can source it.</p>
+        </div>
+        <a href="/products/" class="btn btn-outline self-start md:self-auto">See the full catalogue</a>
+      </div>
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {categories.map((c) => <CategoryCard category={c} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries -->
+  <section class="bg-fog py-20 md:py-28">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <div class="lg:sticky lg:top-32">
+          <h2 class="t-h2 text-ink">Built for sites where HVAC is safety equipment</h2>
+          <p class="t-lead mt-4 text-steel">On a platform or a gas plant, HVAC protects people and keeps hazardous gas out of control rooms. Our supply process starts from that fact.</p>
+          <a href="/industries/" class="link mt-6 inline-block">All industries</a>
+        </div>
+      </div>
+      <ul class="border-t border-ink/15 lg:col-span-8">
+        {
+          industries.map((i) => (
+            <li class="border-b border-ink/15">
+              <a href={`/industries/${i.slug}/`} class="group grid gap-2 py-6 md:grid-cols-[1fr_1.4fr_auto] md:items-center md:gap-8">
+                <span class="t-h3 text-ink">{i.name}</span>
+                <span class="text-[0.975rem] text-steel">{i.short}</span>
+                <span class="hidden size-10 place-items-center rounded-full border border-ink/20 text-ink transition-colors group-hover:border-signal group-hover:bg-signal md:grid">
+                  <Icon name="tabler:arrow-right" class="size-5" aria-hidden="true" />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Process: a real sequence, so numbered -->
+  <section class="py-20 md:py-28">
+    <div class="wrap">
+      <div class="max-w-2xl">
+        <h2 class="t-h2 text-ink">How a request works</h2>
+        <p class="t-lead mt-4 text-steel">One contact person from first email to delivery. You always know the status of every line.</p>
+      </div>
+      <ol class="mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+        {
+          process.map((p, i) => (
+            <li class="relative border-t-2 border-line pt-6">
+              <span class="absolute -top-[2px] left-0 h-[2px] w-12 bg-signal" aria-hidden="true" />
+              <span class="tnum text-[2.5rem] leading-none font-[300] text-ink/30" style="font-stretch:118%">{i + 1}</span>
+              <h3 class="t-h3 mt-4 text-ink">{p.title}</h3>
+              <p class="mt-2 text-steel">{p.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Documentation and Ex -->
+  <section class="border-y border-line bg-fog-2 py-20 md:py-28">
+    <div class="wrap grid gap-14 lg:grid-cols-12 lg:items-center">
+      <div class="lg:col-span-6">
+        <h2 class="t-h2 text-ink">An Ex part is only safe when the certificate matches the part</h2>
+        <p class="t-lead mt-5 text-steel">
+          We check the zone, gas group, temperature class and protection level on every hazardous-area line before we quote. Each order ships with a document pack built to your requirements.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/services/hazardous-area-supply/" class="btn btn-dark">Hazardous-area supply</a>
+          <a href="/quality/" class="btn btn-outline">Quality and compliance</a>
+        </div>
+      </div>
+      <div class="lg:col-span-5 lg:col-start-8">
+        <div class="rounded-[var(--radius-card)] border border-line bg-white">
+          <div class="flex items-center justify-between border-b border-line px-6 py-4">
+            <p class="font-[600] text-ink">Document pack</p>
+            <p class="t-small text-steel">Order PO-55018</p>
+          </div>
+          <ul class="divide-y divide-line">
+            {
+              docs.map((d) => (
+                <li class="flex items-center gap-3 px-6 py-3.5 text-[0.95rem] text-ink">
+                  <Icon name="tabler:file-text" class="size-5 shrink-0 text-steel" aria-hidden="true" />
+                  <span class="flex-1">{d}</span>
+                  <Icon name="tabler:circle-check-filled" class="size-5 text-ink" aria-label="Included" />
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global reach -->
+  <section class="bg-ink py-20 text-white md:py-28">
+    <div class="wrap">
+      <div class="grid gap-8 lg:grid-cols-12 lg:items-end">
+        <h2 class="t-h2 lg:col-span-6">From Australia to the world’s oil and gas regions</h2>
+        <p class="t-lead text-white/70 lg:col-span-5 lg:col-start-8">
+          Australia sits between the producing basins of Asia, the Middle East and the Pacific. We ship by air, sea and road to {destinations.length} regions and beyond.
+        </p>
+      </div>
+      <WorldMap class="mt-14" />
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a href="/global-reach/" class="btn btn-primary">Where we ship</a>
+        <a href="/services/logistics-export/" class="btn btn-ghost-light">Logistics and export</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="py-20 md:py-28">
+    <div class="wrap">
+      <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div class="max-w-2xl">
+          <h2 class="t-h2 text-ink">More than a parts list</h2>
+          <p class="t-lead mt-4 text-steel">Support for the work around the part: finding equivalents, planning outages and keeping critical spares ready.</p>
+        </div>
+        <a href="/services/" class="btn btn-outline self-start md:self-auto">All services</a>
+      </div>
+      <ul class="mt-12 grid gap-px overflow-hidden rounded-[var(--radius-card)] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+        {
+          services.map((s) => (
+            <li class="bg-white">
+              <a href={`/services/${s.slug}/`} class="group flex h-full flex-col p-7 hover:bg-fog-2">
+                <Icon name={s.icon} class="size-7 text-ink" stroke-width="1.5" aria-hidden="true" />
+                <h3 class="t-h3 mt-5 text-ink">{s.name}</h3>
+                <p class="mt-2 text-steel">{s.short}</p>
+                <span class="mt-auto flex items-center gap-1.5 pt-6 text-[0.9rem] font-[600] text-ink">
+                  Learn more
+                  <Icon name="tabler:arrow-right" class="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Insights -->
+  <section class="border-t border-line bg-fog-2 py-20 md:py-28">
+    <div class="wrap">
+      <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <h2 class="t-h2 text-ink">Insights for buyers and engineers</h2>
+        <a href="/insights/" class="link">All insights</a>
+      </div>
+      <div class="mt-12 grid gap-10 md:grid-cols-3">
+        {posts.map((p) => <InsightCard post={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>

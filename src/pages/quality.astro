@@ -1,0 +1,135 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../config/site';
+
+const pillars = [
+  {
+    icon: 'tabler:route',
+    title: 'Traceable sources',
+    text: 'We record where every part comes from. We buy from original makers and authorised distributors first, and we tell you before we use any other source.',
+  },
+  {
+    icon: 'tabler:zoom-check',
+    title: 'Inspection before dispatch',
+    text: 'We check each part against the order: part number, quantity, markings, visible condition and packaging. Ex markings are checked against the order requirements.',
+  },
+  {
+    icon: 'tabler:file-certificate',
+    title: 'Complete documents',
+    text: 'Certificates, test reports and origin documents are collected, checked and sent with the goods, in the format you ask for.',
+  },
+  {
+    icon: 'tabler:shield-lock',
+    title: 'Counterfeit prevention',
+    text: 'We qualify suppliers, check documents for consistency and reject parts with doubtful origin. A low price is never a reason to accept an unknown source.',
+  },
+];
+
+const ex = [
+  ['Protection concept', 'Ex d, Ex e, Ex i, Ex p, Ex n and combinations, as marked on the equipment'],
+  ['Gas group', 'IIA, IIB or IIC, matched to the area classification'],
+  ['Temperature class', 'T1 to T6, matched to the gases present'],
+  ['Equipment protection level', 'Ga, Gb or Gc, matched to Zone 0, 1 or 2'],
+  ['Certificate', 'IECEx or ATEX certificate that covers the exact model supplied'],
+  ['Conditions of use', 'Any specific conditions (the “X” suffix) passed on to your team'],
+];
+---
+
+<Base title="Quality and compliance" description="How Primelink Australia controls sourcing, inspection, hazardous-area compliance and documentation for HVAC spare parts.">
+  <PageHero
+    title="Quality and compliance"
+    lead="In oil and gas, the wrong part, or the right part without its papers, is a risk. Our quality controls exist to remove that risk before the part leaves us."
+    crumbs={[{ label: 'Quality' }]}
+  />
+
+  {
+    site.certifications.length > 0 && (
+      <section class="border-b border-line py-8">
+        <ul class="wrap flex flex-wrap gap-3">
+          {site.certifications.map((c) => (
+            <li class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 font-[600] text-ink">
+              <Icon name="tabler:certificate" class="size-5" aria-hidden="true" />
+              {c}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="py-16 md:py-24">
+    <div class="wrap grid gap-x-12 gap-y-14 md:grid-cols-2">
+      {
+        pillars.map((p) => (
+          <div class="grid grid-cols-[auto_1fr] gap-5">
+            <span class="grid size-12 place-items-center rounded-[var(--radius-plate)] bg-ink text-white">
+              <Icon name={p.icon} class="size-6" aria-hidden="true" />
+            </span>
+            <div>
+              <h2 class="t-h3 text-ink">{p.title}</h2>
+              <p class="mt-2 text-steel">{p.text}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-fog py-16 md:py-24">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <h2 class="t-h2 text-ink">Hazardous-area checks</h2>
+        <p class="mt-4 text-steel">For every Ex item, we check these points against your order and area classification before we quote and again before we ship.</p>
+        <a href="/services/hazardous-area-supply/" class="link mt-6 inline-block">Hazardous-area supply</a>
+      </div>
+      <dl class="divide-y divide-line overflow-hidden rounded-[var(--radius-card)] border border-line bg-white lg:col-span-8">
+        {
+          ex.map(([k, v]) => (
+            <div class="grid gap-1 px-6 py-4 md:grid-cols-[14rem_1fr] md:gap-6">
+              <dt class="font-[600] text-ink">{k}</dt>
+              <dd class="text-steel">{v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <h2 class="t-h2 text-ink">Documents we can provide</h2>
+        <p class="mt-4 text-steel">Tell us your document requirements with your request. Some documents must be requested from the maker when the order is placed.</p>
+        <a href="/insights/documentation-pack-checklist/" class="link mt-6 inline-block">Read the document pack checklist</a>
+      </div>
+      <ul class="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:col-span-6 lg:col-start-7">
+        {
+          [
+            'Certificate of conformity',
+            'IECEx and ATEX certificates',
+            'Ex safety instructions',
+            'Routine and type test reports',
+            'Material certificates (EN 10204 3.1)',
+            'Pressure test certificates',
+            'Fire and blast test records',
+            'Certificate of origin',
+            'Safety data sheets',
+            'Dangerous goods declarations',
+            'Packing lists and tag labels',
+            'Combined PDF document packs',
+          ].map((d) => (
+            <li class="flex gap-3 border-b border-line pb-3 text-graphite">
+              <Icon name="tabler:file-text" class="mt-0.5 size-5 shrink-0 text-steel" aria-hidden="true" />
+              {d}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand title="Tell us your quality requirements" text="Send your specification, vendor document requirements or inspection test plan with your request." />
+</Base>

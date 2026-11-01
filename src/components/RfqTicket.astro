@@ -1,0 +1,119 @@
+---
+/**
+ * Hero element: an example request for quote moving from received to shipped.
+ * Plays once on page load. With reduced motion, it shows the final state.
+ */
+const stages = [
+  { key: 'received', label: 'Request received', time: 'Mon 09:12' },
+  { key: 'quoted', label: 'Quote sent', time: 'Mon 15:40' },
+  { key: 'inspected', label: 'Inspected and documented', time: 'Thu 11:05' },
+  { key: 'shipped', label: 'Shipped to supply base', time: 'Fri 08:30' },
+];
+const rows = [
+  ['OEM reference', '3GZF-132M-4B'],
+  ['Details', '4-pole, B3 foot mount'],
+  ['Quantity', '2'],
+  ['Area rating', 'Zone 1, IIB T4'],
+  ['Deliver to', 'Supply base, Dampier WA'],
+  ['Documents', 'IECEx CoC, test report, certificate of origin'],
+];
+---
+
+<article id="rfq-ticket" class="relative rounded-[var(--radius-card)] bg-white text-graphite shadow-[0_40px_80px_-30px_rgb(0_0_0/0.6)]" aria-label="Example request for quote">
+  <header class="flex items-center justify-between gap-4 border-b border-line px-6 py-4">
+    <p class="t-label">Example request</p>
+    <p class="tnum text-[0.85rem] font-[600] text-ink">RFQ 26-0417</p>
+  </header>
+
+  <div class="px-6 pt-5 pb-6">
+    <div class="flex items-start justify-between gap-4">
+      <h2 class="text-[1.35rem] leading-tight font-[620] text-ink" style="font-stretch:112%">Ex db fan motor, 7.5 kW</h2>
+      <p class="ticket-status shrink-0 rounded-full bg-fog px-2.5 py-1 text-[0.75rem] font-[600] text-ink" aria-live="polite">
+        <span data-status>Shipped</span>
+      </p>
+    </div>
+
+    <dl class="mt-5 grid grid-cols-[8.5rem_1fr] gap-x-4 gap-y-2.5 text-[0.9rem]">
+      {
+        rows.map(([k, v]) => (
+          <>
+            <dt class="text-steel">{k}</dt>
+            <dd class="tnum font-[540] text-ink">{v}</dd>
+          </>
+        ))
+      }
+    </dl>
+
+    <ol class="mt-6 grid gap-0 border-t border-line pt-5">
+      {
+        stages.map((s, i) => (
+          <li class="stage relative flex items-center gap-3 pb-3.5 last:pb-0" data-stage={i} data-label={s.label}>
+            {i < stages.length - 1 && <span class="stage-line absolute top-[0.9rem] left-[0.4375rem] h-[calc(100%-0.5rem)] w-[2px] bg-line" aria-hidden="true" />}
+            <span class="stage-dot relative z-10 grid size-4 place-items-center rounded-full border-2 border-line bg-white" aria-hidden="true" />
+            <span class="flex flex-1 items-baseline justify-between gap-3 text-[0.9rem]">
+              <span class="stage-text font-[560] text-ink">{s.label}</span>
+              <span class="tnum text-[0.8rem] text-steel">{s.time}</span>
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</article>
+
+<style>
+  .stage-dot,
+  .stage-line {
+    transition:
+      background-color 0.35s ease,
+      border-color 0.35s ease;
+  }
+  .stage-text {
+    transition: opacity 0.35s ease;
+  }
+  #rfq-ticket:not(.is-done) .stage:not(.is-on) .stage-text {
+    opacity: 0.45;
+  }
+  .stage.is-on .stage-dot {
+    border-color: var(--color-signal);
+    background: var(--color-signal);
+  }
+  .stage.is-on .stage-line {
+    background: var(--color-signal);
+  }
+  .stage.is-on:has(+ .stage:not(.is-on)) .stage-line {
+    background: var(--color-line);
+  }
+  #rfq-ticket.is-done .ticket-status {
+    background: var(--color-signal);
+  }
+</style>
+
+<script>
+  const ticket = document.getElementById('rfq-ticket');
+  if (ticket) {
+    const stages = Array.from(ticket.querySelectorAll<HTMLElement>('.stage'));
+    const status = ticket.querySelector<HTMLElement>('[data-status]');
+    const finish = () => {
+      stages.forEach((s) => s.classList.add('is-on'));
+      ticket.classList.add('is-done');
+      if (status) status.textContent = 'Shipped';
+    };
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      finish();
+    } else {
+      const short = ['Received', 'Quoted', 'Inspected', 'Shipped'];
+      let i = 0;
+      const step = () => {
+        stages[i]?.classList.add('is-on');
+        if (status) status.textContent = short[i];
+        i += 1;
+        if (i < stages.length) window.setTimeout(step, 750);
+        else ticket.classList.add('is-done');
+      };
+      if (status) status.textContent = 'Received';
+      window.setTimeout(step, 500);
+    }
+  }
+</script>

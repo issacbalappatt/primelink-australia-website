@@ -1,0 +1,243 @@
+---
+import { Icon } from 'astro-icon/components';
+import Logo from './Logo.astro';
+import { nav, site } from '../config/site';
+import { categories } from '../data/products';
+import { industries } from '../data/industries';
+import { services } from '../data/services';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const activeCompany = nav.company.some((c) => path.startsWith(c.href));
+---
+
+<div class="bg-ink text-white/75">
+  <div class="wrap flex h-9 items-center justify-between gap-6 text-[0.8125rem]">
+    <p class="hidden truncate sm:block">HVAC spare parts for oil and gas operators, shipped from Australia to sites worldwide</p>
+    <div class="flex items-center gap-5">
+      <a href={`mailto:${site.contact.salesEmail}`} class="inline-flex items-center gap-1.5 hover:text-white">
+        <Icon name="tabler:mail" class="size-4" aria-hidden="true" />{site.contact.salesEmail}
+      </a>
+      {
+        site.contact.phone && (
+          <a href={`tel:${site.contact.phone.replace(/\s/g, '')}`} class="hidden items-center gap-1.5 hover:text-white md:inline-flex">
+            <Icon name="tabler:phone" class="size-4" aria-hidden="true" />
+            {site.contact.phone}
+          </a>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<header id="site-header" class="sticky top-0 z-50 border-b border-line bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
+  <div class="wrap flex h-[4.5rem] items-center justify-between gap-6">
+    <a href="/" aria-label="Primelink Australia home" class="shrink-0"><Logo /></a>
+
+    <nav aria-label="Main" class="hidden h-full lg:block">
+      <ul class="flex h-full items-center gap-1">
+        {
+          nav.main.map((item) => {
+            const active = item.menu === 'company' ? activeCompany : isActive(item.href);
+            return (
+              <li class="group h-full" data-menu={item.menu}>
+                <a
+                  href={item.href}
+                  class:list={[
+                    'relative flex h-full items-center gap-1 px-3.5 text-[0.95rem] font-[560] text-ink transition-colors hover:text-ink',
+                    "after:absolute after:inset-x-3.5 after:bottom-0 after:h-[3px] after:origin-left after:scale-x-0 after:bg-signal after:transition-transform group-hover:after:scale-x-100 group-focus-within:after:scale-x-100",
+                    active && 'after:scale-x-100',
+                  ]}
+                  aria-current={active ? 'page' : undefined}
+                  aria-haspopup={item.menu ? 'true' : undefined}
+                >
+                  {item.label}
+                  {item.menu && <Icon name="tabler:chevron-down" class="size-4 text-steel transition-transform group-hover:rotate-180" aria-hidden="true" />}
+                </a>
+
+                {item.menu && (
+                  <div class="mega invisible absolute inset-x-0 top-full -mt-px border-y border-line bg-white opacity-0 shadow-[0_24px_48px_-24px_rgb(12_30_43/0.25)] transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                    {item.menu === 'products' && (
+                      <div class="wrap grid grid-cols-12 gap-10 py-10">
+                        <div class="col-span-3 border-r border-line pr-8">
+                          <p class="t-h3 text-ink">Products</p>
+                          <p class="t-small mt-2 text-steel">Eight product families, sourced from original makers and qualified alternatives.</p>
+                          <a href="/products/" class="link mt-5 inline-block text-[0.95rem]">See the full catalogue</a>
+                          <form action="/request-a-quote/" method="get" class="mt-8">
+                            <label for="mega-part" class="t-label">Have a part number?</label>
+                            <div class="mt-2 flex">
+                              <input id="mega-part" name="part" class="input rounded-r-none" placeholder="OEM part number" autocomplete="off" />
+                              <button class="btn btn-dark rounded-l-none px-3.5" aria-label="Request a quote for this part">
+                                <Icon name="tabler:arrow-right" class="size-5" aria-hidden="true" />
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                        <ul class="col-span-9 grid grid-cols-2 gap-x-8 gap-y-1 xl:grid-cols-4 xl:gap-y-6">
+                          {categories.map((c) => (
+                            <li>
+                              <a href={`/products/${c.slug}/`} class="group/item -m-3 flex gap-3 rounded-[var(--radius-card)] p-3 hover:bg-fog xl:flex-col">
+                                <span class="grid size-10 shrink-0 place-items-center rounded-[var(--radius-plate)] bg-fog text-ink group-hover/item:bg-white">
+                                  <Icon name={c.icon} class="size-5" aria-hidden="true" />
+                                </span>
+                                <span>
+                                  <span class="block text-[0.95rem] font-[600] leading-snug text-ink">{c.name}</span>
+                                  <span class="t-small mt-1 line-clamp-2 block text-steel">{c.short}</span>
+                                </span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {item.menu === 'industries' && (
+                      <div class="wrap grid grid-cols-12 gap-10 py-10">
+                        <div class="col-span-3 border-r border-line pr-8">
+                          <p class="t-h3 text-ink">Industries</p>
+                          <p class="t-small mt-2 text-steel">Parts for facilities where HVAC is safety equipment, not comfort equipment.</p>
+                          <a href="/industries/" class="link mt-5 inline-block text-[0.95rem]">All industries</a>
+                        </div>
+                        <ul class="col-span-9 grid grid-cols-3 gap-x-8 gap-y-6">
+                          {industries.map((i) => (
+                            <li>
+                              <a href={`/industries/${i.slug}/`} class="-m-3 block rounded-[var(--radius-card)] p-3 hover:bg-fog">
+                                <span class="block text-[0.95rem] font-[600] text-ink">{i.name}</span>
+                                <span class="t-small mt-1 block text-steel">{i.short}</span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {item.menu === 'services' && (
+                      <div class="wrap grid grid-cols-12 gap-10 py-10">
+                        <div class="col-span-3 border-r border-line pr-8">
+                          <p class="t-h3 text-ink">Services</p>
+                          <p class="t-small mt-2 text-steel">From one urgent part to a full shutdown spares package.</p>
+                          <a href="/services/" class="link mt-5 inline-block text-[0.95rem]">All services</a>
+                        </div>
+                        <ul class="col-span-9 grid grid-cols-3 gap-x-8 gap-y-6">
+                          {services.map((s) => (
+                            <li>
+                              <a href={`/services/${s.slug}/`} class="-m-3 flex gap-3 rounded-[var(--radius-card)] p-3 hover:bg-fog">
+                                <Icon name={s.icon} class="mt-0.5 size-5 shrink-0 text-ink" aria-hidden="true" />
+                                <span>
+                                  <span class="block text-[0.95rem] font-[600] text-ink">{s.name}</span>
+                                  <span class="t-small mt-1 block text-steel">{s.short}</span>
+                                </span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {item.menu === 'company' && (
+                      <div class="wrap grid grid-cols-12 gap-10 py-10">
+                        <div class="col-span-3 border-r border-line pr-8">
+                          <p class="t-h3 text-ink">Company</p>
+                          <p class="t-small mt-2 text-steel">An Australian supplier with a global reach.</p>
+                        </div>
+                        <ul class="col-span-9 grid grid-cols-3 gap-x-8 gap-y-6">
+                          {nav.company.map((c) => (
+                            <li>
+                              <a href={c.href} class="-m-3 block rounded-[var(--radius-card)] p-3 hover:bg-fog">
+                                <span class="block text-[0.95rem] font-[600] text-ink">{c.label}</span>
+                                <span class="t-small mt-1 block text-steel">{c.text}</span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href="/contact/" class="hidden px-3 text-[0.95rem] font-[560] text-ink hover:text-steel xl:inline">Contact</a>
+      <a href="/request-a-quote/" class="btn btn-primary hidden sm:inline-flex">Request a quote</a>
+      <button
+        id="menu-open"
+        type="button"
+        class="grid size-11 place-items-center rounded-[var(--radius-btn)] text-ink hover:bg-fog lg:hidden"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        aria-label="Open menu"
+      >
+        <Icon name="tabler:menu-2" class="size-6" aria-hidden="true" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div id="mobile-menu" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-white lg:hidden" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="wrap flex h-[4.5rem] items-center justify-between border-b border-line">
+    <a href="/" aria-label="Primelink Australia home"><Logo /></a>
+    <button id="menu-close" type="button" class="grid size-11 place-items-center rounded-[var(--radius-btn)] text-ink hover:bg-fog" aria-label="Close menu">
+      <Icon name="tabler:x" class="size-6" aria-hidden="true" />
+    </button>
+  </div>
+  <nav aria-label="Mobile" class="wrap pb-10">
+    <details class="group border-b border-line">
+      <summary class="flex cursor-pointer list-none items-center justify-between py-4 text-lg font-[600] text-ink">
+        Products <Icon name="tabler:chevron-down" class="size-5 transition-transform group-open:rotate-180" aria-hidden="true" />
+      </summary>
+      <ul class="pb-4">
+        <li><a href="/products/" class="block py-2 font-[560] text-ink">Full catalogue</a></li>
+        {categories.map((c) => <li><a href={`/products/${c.slug}/`} class="block py-2 text-steel">{c.name}</a></li>)}
+      </ul>
+    </details>
+    <details class="group border-b border-line">
+      <summary class="flex cursor-pointer list-none items-center justify-between py-4 text-lg font-[600] text-ink">
+        Industries <Icon name="tabler:chevron-down" class="size-5 transition-transform group-open:rotate-180" aria-hidden="true" />
+      </summary>
+      <ul class="pb-4">
+        <li><a href="/industries/" class="block py-2 font-[560] text-ink">All industries</a></li>
+        {industries.map((i) => <li><a href={`/industries/${i.slug}/`} class="block py-2 text-steel">{i.name}</a></li>)}
+      </ul>
+    </details>
+    <details class="group border-b border-line">
+      <summary class="flex cursor-pointer list-none items-center justify-between py-4 text-lg font-[600] text-ink">
+        Services <Icon name="tabler:chevron-down" class="size-5 transition-transform group-open:rotate-180" aria-hidden="true" />
+      </summary>
+      <ul class="pb-4">
+        <li><a href="/services/" class="block py-2 font-[560] text-ink">All services</a></li>
+        {services.map((s) => <li><a href={`/services/${s.slug}/`} class="block py-2 text-steel">{s.name}</a></li>)}
+      </ul>
+    </details>
+    <a href="/quality/" class="block border-b border-line py-4 text-lg font-[600] text-ink">Quality</a>
+    {nav.company.map((c) => <a href={c.href} class="block border-b border-line py-4 text-lg font-[600] text-ink">{c.label}</a>)}
+    <a href="/request-a-quote/" class="btn btn-primary mt-8 w-full justify-center">Request a quote</a>
+  </nav>
+</div>
+
+<script>
+  const menu = document.getElementById('mobile-menu');
+  const openBtn = document.getElementById('menu-open');
+  const closeBtn = document.getElementById('menu-close');
+  const setOpen = (open: boolean) => {
+    menu?.classList.toggle('hidden', !open);
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    openBtn?.setAttribute('aria-expanded', String(open));
+    if (open) closeBtn?.focus();
+    else openBtn?.focus();
+  };
+  openBtn?.addEventListener('click', () => setOpen(true));
+  closeBtn?.addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (menu && !menu.classList.contains('hidden')) setOpen(false);
+    // Close a desktop mega menu that is open by keyboard focus
+    const active = document.activeElement as HTMLElement | null;
+    if (active && active.closest('[data-menu]')) active.blur();
+  });
+</script>

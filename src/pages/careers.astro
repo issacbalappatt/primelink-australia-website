@@ -1,0 +1,46 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../config/site';
+
+const roles = [
+  { title: 'Technical sales', text: 'HVAC or refrigeration background, comfortable reading datasheets and talking to engineers.' },
+  { title: 'Procurement and expediting', text: 'Experience sourcing industrial parts and keeping suppliers to their dates.' },
+  { title: 'Logistics and export', text: 'Knowledge of export documents, dangerous goods and freight to remote sites.' },
+];
+---
+
+<Base title="Careers" description="Careers at Primelink Australia: technical sales, procurement and logistics roles supplying HVAC parts to the oil and gas industry.">
+  <PageHero
+    title="Careers"
+    lead="We are a small team that supplies some of the most demanding sites in the world. If you like solving supply problems, we would like to hear from you."
+    crumbs={[{ label: 'Careers' }]}
+  />
+
+  <section class="py-16 md:py-24">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <h2 class="t-h2 text-ink">No open roles at the moment</h2>
+        <p class="mt-4 text-steel">We still welcome general applications. We keep them on file and contact you when a suitable role opens.</p>
+        <a href={`mailto:${site.contact.careersEmail}?subject=${encodeURIComponent('General application')}`} class="btn btn-primary mt-7">
+          <Icon name="tabler:mail" class="size-5" aria-hidden="true" />Send your CV
+        </a>
+        <p class="t-small mt-3 text-steel">{site.contact.careersEmail}</p>
+      </div>
+      <div class="lg:col-span-6 lg:col-start-7">
+        <h2 class="t-label">Skills we look for</h2>
+        <ul class="mt-4 divide-y divide-line border-y border-line">
+          {
+            roles.map((r) => (
+              <li class="py-5">
+                <h3 class="t-h3 text-ink">{r.title}</h3>
+                <p class="mt-1.5 text-steel">{r.text}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>

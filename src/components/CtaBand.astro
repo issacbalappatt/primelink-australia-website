@@ -1,0 +1,30 @@
+---
+import { Icon } from 'astro-icon/components';
+import { site } from '../config/site';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = 'Send us a part number. We send you a quote.',
+  text = `Add as many lines as you need, with photos or drawings. We aim to reply within ${site.quoteResponse}.`,
+} = Astro.props;
+---
+
+<section class="bg-signal">
+  <div class="wrap grid gap-8 py-14 md:py-16 lg:grid-cols-12 lg:items-center">
+    <div class="lg:col-span-7">
+      <h2 class="t-h2 text-ink">{title}</h2>
+      <p class="t-lead mt-4 max-w-xl text-ink/80">{text}</p>
+    </div>
+    <div class="flex flex-wrap gap-3 lg:col-span-5 lg:justify-end">
+      <a href="/request-a-quote/" class="btn btn-dark">
+        <Icon name="tabler:file-text" class="size-5" aria-hidden="true" />Request a quote
+      </a>
+      <a href={`mailto:${site.contact.salesEmail}`} class="btn border border-ink/30 text-ink hover:border-ink">
+        <Icon name="tabler:mail" class="size-5" aria-hidden="true" />Email the sales team
+      </a>
+    </div>
+  </div>
+</section>

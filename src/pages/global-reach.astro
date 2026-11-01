@@ -1,0 +1,80 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import WorldMap from '../components/WorldMap.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { regionsDetail } from '../data/regions';
+
+const modes = [
+  { icon: 'tabler:plane', title: 'Air freight', text: 'For urgent parts and breakdowns. Door-to-door or airport-to-airport, with dangerous goods handling where required.' },
+  { icon: 'tabler:ship', title: 'Sea freight', text: 'For large or heavy items and planned orders. Full and shared container loads to major oil and gas ports.' },
+  { icon: 'tabler:truck', title: 'Road freight', text: 'Within Australia and to land-based sites, including remote plants and mine sites.' },
+  { icon: 'tabler:anchor', title: 'Supply bases and vessel agents', text: 'Delivery to offshore supply bases, marine terminals and ship agents, timed to vessel schedules.' },
+];
+---
+
+<Base title="Global reach" description="Primelink Australia ships HVAC spare parts from Australia to oil and gas regions in Asia, the Middle East, Europe, Africa and the Americas.">
+  <section class="bg-ink text-white">
+    <div class="wrap pt-10 pb-16 md:pb-24">
+      <Breadcrumbs items={[{ label: 'Global reach' }]} tone="dark" />
+      <div class="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
+        <h1 class="t-h1 lg:col-span-7">Parts shipped to oil and gas sites worldwide</h1>
+        <p class="t-lead text-white/70 lg:col-span-5">From Australia to platforms, plants and vessels across five continents. We prepare the documents, the packing and the freight.</p>
+      </div>
+      <WorldMap class="mt-14" />
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <h2 class="t-h2 text-ink">Regions we ship to</h2>
+        <p class="mt-4 text-steel">These are typical destinations. If your site is not listed, ask us. We ship to most countries that permit the goods.</p>
+      </div>
+      <dl class="divide-y divide-line border-y border-line lg:col-span-8">
+        {
+          regionsDetail.map((r) => (
+            <div class="grid gap-1 py-5 md:grid-cols-[13rem_1fr] md:gap-6">
+              <dt class="t-h3 text-ink">{r.region}</dt>
+              <dd class="text-steel">{r.places}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-fog py-16 md:py-24">
+    <div class="wrap">
+      <h2 class="t-h2 max-w-2xl text-ink">How we deliver</h2>
+      <div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          modes.map((m) => (
+            <div class="rounded-[var(--radius-card)] bg-white p-7">
+              <Icon name={m.icon} class="size-8 text-ink" stroke-width="1.4" aria-hidden="true" />
+              <h3 class="t-h3 mt-5 text-ink">{m.title}</h3>
+              <p class="mt-2 text-[0.95rem] text-steel">{m.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <h2 class="t-h2 text-ink lg:col-span-4">Export details we take care of</h2>
+      <ul class="grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:col-span-8">
+        <li class="border-l-2 border-signal pl-5"><p class="font-[600] text-ink">Incoterms to suit you</p><p class="t-small mt-1 text-steel">EXW, FCA, CPT, CIP, DAP and DDP on request.</p></li>
+        <li class="border-l-2 border-signal pl-5"><p class="font-[600] text-ink">Export documents</p><p class="t-small mt-1 text-steel">Commercial invoice, packing list and certificate of origin.</p></li>
+        <li class="border-l-2 border-signal pl-5"><p class="font-[600] text-ink">Dangerous goods</p><p class="t-small mt-1 text-steel">Packing and declarations for refrigerants and other regulated items.</p></li>
+        <li class="border-l-2 border-signal pl-5"><p class="font-[600] text-ink">Export control screening</p><p class="t-small mt-1 text-steel">Orders are checked against applicable export and sanctions rules.</p></li>
+        <li class="border-l-2 border-signal pl-5"><p class="font-[600] text-ink">Offshore-ready packing</p><p class="t-small mt-1 text-steel">Crates, labels and lifting points to supply base requirements.</p></li>
+        <li class="border-l-2 border-signal pl-5"><p class="font-[600] text-ink">Tracking</p><p class="t-small mt-1 text-steel">Shipment status and tracking numbers sent as soon as goods move.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand title="Tell us where the part needs to go" text="Include the delivery site, supply base or vessel agent with your request, and we will quote the freight with the parts." />
+</Base>

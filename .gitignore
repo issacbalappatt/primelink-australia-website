@@ -1,5 +1,6 @@
 node_modules/
 dist/
+.astro/
 .DS_Store
 .env
 .env.*
@@ -7,3 +8,4 @@ dist/
 *.log
 .vercel/
 .netlify/
+.wrangler/

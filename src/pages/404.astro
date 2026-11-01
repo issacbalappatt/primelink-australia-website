@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { categories } from '../data/products';
+---
+
+<Base title="Page not found" noindex>
+  <section class="blueprint-dark text-white">
+    <div class="wrap grid gap-10 py-24 md:py-32 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="tnum text-[1rem] font-[600] text-signal">Error 404</p>
+        <h1 class="t-h1 mt-4">This page is not on our shelves</h1>
+        <p class="t-lead mt-5 text-white/70">The address may be wrong, or the page has moved. Try one of these links, or send us the part number you are looking for.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/" class="btn btn-primary">Go to the home page</a>
+          <a href="/request-a-quote/" class="btn btn-ghost-light">Request a quote</a>
+        </div>
+      </div>
+      <ul class="grid content-start gap-2 lg:col-span-4 lg:col-start-9">
+        {
+          categories.map((c) => (
+            <li>
+              <a href={`/products/${c.slug}/`} class="block border-b border-line-dark py-2.5 text-white/80 hover:text-white">
+                {c.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>

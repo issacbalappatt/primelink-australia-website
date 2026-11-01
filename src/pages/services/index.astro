@@ -1,0 +1,44 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { services } from '../../data/services';
+---
+
+<Base title="Services" description="Global sourcing, obsolete part replacement, hazardous-area supply, shutdown support, export logistics and spares programmes for HVAC in oil and gas.">
+  <PageHero
+    title="Services"
+    lead="We do more than supply a part. We find it, check it, document it and deliver it to a site that may be hundreds of kilometres offshore."
+    crumbs={[{ label: 'Services' }]}
+  />
+
+  <section class="py-16 md:py-24">
+    <div class="wrap grid gap-16">
+      {
+        services.map((s) => (
+          <article class="grid gap-8 border-t border-line pt-12 lg:grid-cols-12 first:border-0 first:pt-0">
+            <div class="lg:col-span-5">
+              <Icon name={s.icon} class="size-9 text-ink" stroke-width="1.4" aria-hidden="true" />
+              <h2 class="t-h2 mt-5 text-ink">{s.name}</h2>
+              <p class="t-lead mt-4 text-steel">{s.short}</p>
+              <a href={`/services/${s.slug}/`} class="btn btn-outline mt-7">
+                About {s.name.toLowerCase()}
+              </a>
+            </div>
+            <ul class="grid content-start gap-6 sm:grid-cols-2 lg:col-span-6 lg:col-start-7">
+              {s.points.slice(0, 4).map((p) => (
+                <li class="border-l-2 border-line pl-5">
+                  <h3 class="font-[600] text-ink">{p.title}</h3>
+                  <p class="t-small mt-1.5 text-steel">{p.text}</p>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>

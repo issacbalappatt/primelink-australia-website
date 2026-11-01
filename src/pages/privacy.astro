@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../config/site';
+---
+
+<Base title="Privacy policy" description="How Primelink Australia collects, uses and protects personal information.">
+  <PageHero title="Privacy policy" crumbs={[{ label: 'Privacy policy' }]} />
+  <section class="py-14 md:py-20">
+    <div class="wrap">
+      <div class="prose-pl mx-auto max-w-3xl">
+        <p><strong>Draft for review.</strong> This policy is a starting template. Have it reviewed against the Australian Privacy Principles and your actual practices before the site goes live.</p>
+        <p>{site.legalName} (“we”, “us”) respects your privacy. This policy explains what personal information we collect through this website and how we use it.</p>
+
+        <h2>Information we collect</h2>
+        <ul>
+          <li>Details you give us in a quote request or contact form: name, company, email, phone, country, delivery details and any files you attach.</li>
+          <li>Emails and other messages you send us.</li>
+          <li>Basic technical data from your browser, such as pages visited, if analytics are enabled on this site.</li>
+        </ul>
+
+        <h2>How we use it</h2>
+        <ul>
+          <li>To reply to your request and prepare quotes.</li>
+          <li>To process and deliver orders, including export and freight documents.</li>
+          <li>To meet our legal obligations, such as tax, customs and export control records.</li>
+        </ul>
+        <p>We do not sell your personal information. We do not send marketing emails unless you ask us to.</p>
+
+        <h2>Who we share it with</h2>
+        <p>We share information only as needed to supply your order, for example with manufacturers, distributors, freight forwarders and customs brokers. Some of these parties may be outside Australia.</p>
+
+        <h2>Storage and security</h2>
+        <p>We store information on secure systems and limit access to staff who need it. We keep records for as long as needed for the purposes above and our legal obligations.</p>
+
+        <h2>Access and correction</h2>
+        <p>You can ask to see or correct the personal information we hold about you. Email <a href={`mailto:${site.contact.generalEmail}`}>{site.contact.generalEmail}</a>.</p>
+
+        <h2>Complaints</h2>
+        <p>If you have a privacy concern, contact us first. If you are not satisfied with our response, you can contact the Office of the Australian Information Commissioner (OAIC).</p>
+
+        <p class="t-small text-steel">Last updated: November 2026.</p>
+      </div>
+    </div>
+  </section>
+</Base>

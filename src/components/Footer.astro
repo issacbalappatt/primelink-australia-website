@@ -1,0 +1,101 @@
+---
+import { Icon } from 'astro-icon/components';
+import Logo from './Logo.astro';
+import { nav, site } from '../config/site';
+import { categories } from '../data/products';
+import { industries } from '../data/industries';
+import { services } from '../data/services';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-ink text-white/70">
+  <div class="wrap grid gap-12 py-16 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <Logo tone="light" />
+      <p class="mt-6 max-w-sm text-[0.95rem] leading-relaxed">
+        HVAC spare parts for offshore platforms, FPSOs, LNG plants, refineries and mine sites. Sourced worldwide, documented and delivered to site.
+      </p>
+      <dl class="mt-8 grid gap-3 text-[0.95rem]">
+        <div class="flex gap-3">
+          <dt class="sr-only">Sales email</dt>
+          <Icon name="tabler:mail" class="mt-0.5 size-5 shrink-0 text-air" aria-hidden="true" />
+          <dd><a href={`mailto:${site.contact.salesEmail}`} class="text-white hover:underline">{site.contact.salesEmail}</a></dd>
+        </div>
+        {
+          site.contact.phone && (
+            <div class="flex gap-3">
+              <dt class="sr-only">Phone</dt>
+              <Icon name="tabler:phone" class="mt-0.5 size-5 shrink-0 text-air" aria-hidden="true" />
+              <dd>
+                <a href={`tel:${site.contact.phone.replace(/\s/g, '')}`} class="text-white hover:underline">
+                  {site.contact.phone}
+                </a>
+              </dd>
+            </div>
+          )
+        }
+        <div class="flex gap-3">
+          <dt class="sr-only">Address</dt>
+          <Icon name="tabler:map-pin" class="mt-0.5 size-5 shrink-0 text-air" aria-hidden="true" />
+          <dd>{site.contact.addressLines.join(', ')}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="grid grid-cols-2 gap-10 sm:grid-cols-4 lg:col-span-8">
+      <div>
+        <p class="text-[0.95rem] font-[600] text-white">Products</p>
+        <ul class="mt-4 grid gap-2.5 text-[0.9rem]">
+          {categories.map((c) => <li><a href={`/products/${c.slug}/`} class="hover:text-white">{c.name.replace(' and compressor parts', '')}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <p class="text-[0.95rem] font-[600] text-white">Industries</p>
+        <ul class="mt-4 grid gap-2.5 text-[0.9rem]">
+          {industries.map((i) => <li><a href={`/industries/${i.slug}/`} class="hover:text-white">{i.name}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <p class="text-[0.95rem] font-[600] text-white">Services</p>
+        <ul class="mt-4 grid gap-2.5 text-[0.9rem]">
+          {services.map((s) => <li><a href={`/services/${s.slug}/`} class="hover:text-white">{s.name}</a></li>)}
+          <li><a href="/quality/" class="hover:text-white">Quality and compliance</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-[0.95rem] font-[600] text-white">Company</p>
+        <ul class="mt-4 grid gap-2.5 text-[0.9rem]">
+          {nav.company.map((c) => <li><a href={c.href} class="hover:text-white">{c.label}</a></li>)}
+          <li><a href="/request-a-quote/" class="hover:text-white">Request a quote</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t border-line-dark">
+    <div class="wrap flex flex-col gap-4 py-6 text-[0.8125rem] md:flex-row md:items-center md:justify-between">
+      <p>
+        © {year} {site.legalName}{site.abn && <span>, ABN {site.abn}</span>}. All rights reserved.
+      </p>
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+        <li><a href="/privacy/" class="hover:text-white">Privacy policy</a></li>
+        <li><a href="/terms/" class="hover:text-white">Terms of trade</a></li>
+        <li><a href="/sitemap-index.xml" class="hover:text-white">Sitemap</a></li>
+        {
+          site.contact.linkedin && (
+            <li>
+              <a href={site.contact.linkedin} class="inline-flex items-center gap-1.5 hover:text-white" rel="noopener">
+                <Icon name="tabler:brand-linkedin" class="size-4" aria-hidden="true" />
+                LinkedIn
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </div>
+    <p class="wrap pb-8 text-[0.75rem] leading-relaxed text-white/45">
+      Manufacturer names and part numbers are used for identification only. They are trademarks of their owners. Primelink Australia is an independent supplier and is not an authorised agent of any manufacturer unless stated in writing.
+    </p>
+  </div>
+</footer>

@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../config/site';
+---
+
+<Base title="Terms of trade" description="Terms of trade for quotes and orders placed with Primelink Australia.">
+  <PageHero title="Terms of trade" crumbs={[{ label: 'Terms of trade' }]} />
+  <section class="py-14 md:py-20">
+    <div class="wrap">
+      <div class="prose-pl mx-auto max-w-3xl">
+        <p><strong>Draft for review.</strong> This page is a summary template. Replace it with your full terms and conditions of sale after legal review.</p>
+
+        <h2>Quotes</h2>
+        <p>Quotes are valid for the period stated on the quote. Prices and lead times depend on supplier availability at the time of order. We confirm the final lead time with the order acknowledgement.</p>
+
+        <h2>Orders</h2>
+        <p>An order is accepted when we send a written order acknowledgement. Your purchase order should state the part numbers, quantities, delivery point, required documents and any inspection requirements.</p>
+
+        <h2>Delivery</h2>
+        <p>Delivery terms follow the Incoterm stated on the quote and order acknowledgement. Risk passes to the buyer as set out by that Incoterm.</p>
+
+        <h2>Payment</h2>
+        <p>Payment terms are stated on the quote. New customers may be asked for payment in advance or a credit application.</p>
+
+        <h2>Returns</h2>
+        <p>Contact us before returning any goods. Non-stock and special-order items may not be returnable. Goods must be returned unused, in original packaging, with all documents.</p>
+
+        <h2>Warranty</h2>
+        <p>Parts carry the warranty provided by the manufacturer. We pass this warranty on to you and help you make a claim. Nothing in these terms excludes rights you have under the Australian Consumer Law.</p>
+
+        <h2>Manufacturer names</h2>
+        <p>Manufacturer names and part numbers are used for identification only. {site.name} is an independent supplier and is not an authorised agent of any manufacturer unless stated in writing.</p>
+
+        <h2>Contact</h2>
+        <p>Questions about these terms: <a href={`mailto:${site.contact.generalEmail}`}>{site.contact.generalEmail}</a>.</p>
+      </div>
+    </div>
+  </section>
+</Base>

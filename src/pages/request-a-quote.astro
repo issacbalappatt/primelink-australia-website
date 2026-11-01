@@ -1,0 +1,209 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { site } from '../config/site';
+import { categories } from '../data/products';
+
+const docs = ['Certificate of conformity', 'IECEx or ATEX certificate', 'Test report', 'Material certificate (3.1)', 'Certificate of origin', 'Not sure yet'];
+---
+
+<Base title="Request a quote" description="Send part numbers, photos or a full spares list. Primelink Australia replies with one quote covering price, lead time, origin and documents.">
+  <section class="border-b border-line bg-fog-2">
+    <div class="wrap pt-10 pb-12">
+      <Breadcrumbs items={[{ label: 'Request a quote' }]} />
+      <div class="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
+        <h1 class="t-h1 text-ink lg:col-span-7">Request a quote</h1>
+        <p class="t-lead text-steel lg:col-span-5">Add one line or fifty. The more detail you give, the faster and more accurate the quote. We aim to reply within {site.quoteResponse}.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-8">
+        <form id="rfq-form" class="grid gap-12" data-endpoint={site.formEndpoint || undefined} data-success="rfq-success" data-to={site.contact.salesEmail}>
+          <input type="hidden" name="form" value="Request for quote" />
+          <div class="hidden" aria-hidden="true"><label>Leave empty <input name="company_website" tabindex="-1" autocomplete="off" /></label></div>
+
+          <fieldset>
+            <legend class="t-h3 text-ink">Parts</legend>
+            <p class="t-small mt-1 text-steel">Enter the OEM part number if you have it. If not, describe the part and attach a photo below.</p>
+            <div id="lines" class="mt-6 grid gap-4">
+              <div class="line grid gap-3 rounded-[var(--radius-card)] border border-line p-4 md:grid-cols-[1.2fr_1fr_1.6fr_5rem_auto] md:items-end md:border-0 md:p-0" data-line>
+                <label class="field"><span>Part number</span><input name="line_part[]" class="input" autocomplete="off" /></label>
+                <label class="field"><span>Maker</span><input name="line_maker[]" class="input" autocomplete="off" /></label>
+                <label class="field"><span>Description</span><input name="line_desc[]" class="input" autocomplete="off" /></label>
+                <label class="field"><span>Qty</span><input name="line_qty[]" type="number" min="1" value="1" class="input" /></label>
+                <button type="button" class="remove-line grid size-11 place-items-center rounded-[var(--radius-btn)] text-steel hover:bg-fog hover:text-ink" aria-label="Remove this line" hidden>
+                  <Icon name="tabler:trash" class="size-5" aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+            <button id="add-line" type="button" class="btn btn-outline mt-4">
+              <Icon name="tabler:plus" class="size-5" aria-hidden="true" />Add another part
+            </button>
+
+            <div class="mt-8 grid gap-5 md:grid-cols-2">
+              <label class="field">
+                <span>Product family (optional)</span>
+                <select name="category" class="input" data-label="Product family">
+                  <option value="">Select</option>
+                  {categories.map((c) => <option value={c.slug}>{c.name}</option>)}
+                  <option value="mixed">Mixed list</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Attachments (optional)</span>
+                <input name="attachments" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.xls,.csv,.doc,.docx" class="input file:mr-3 file:rounded file:border-0 file:bg-fog file:px-3 file:py-1.5 file:font-[560] file:text-ink" />
+              </label>
+            </div>
+            <p class="t-small mt-2 text-steel">Nameplate photos, drawings, datasheets or a spares list. PDF, image, Excel or Word.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend class="t-h3 text-ink">Hazardous area and documents</legend>
+            <div class="mt-6 grid gap-5 md:grid-cols-2">
+              <label class="field">
+                <span>Hazardous-area rating, if any</span>
+                <input name="ex_rating" class="input" placeholder="For example: Zone 1, IIB T4, Gb" data-label="Hazardous-area rating" />
+              </label>
+              <label class="field">
+                <span>Required by</span>
+                <input name="required_by" type="date" class="input" data-label="Required by" />
+              </label>
+            </div>
+            <p class="mt-6 text-[0.875rem] font-[560] text-ink">Documents you need</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              {
+                docs.map((d) => (
+                  <label class="cursor-pointer">
+                    <input type="checkbox" name="documents" value={d} class="peer sr-only" data-label="Documents" />
+                    <span class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-[0.9rem] text-ink peer-checked:border-ink peer-checked:bg-ink peer-checked:text-white peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-signal">
+                      {d}
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="t-h3 text-ink">Delivery</legend>
+            <div class="mt-6 grid gap-5 md:grid-cols-2">
+              <label class="field">
+                <span>Destination country</span>
+                <input name="country" class="input" required autocomplete="country-name" data-label="Destination country" />
+              </label>
+              <label class="field">
+                <span>Delivery point</span>
+                <input name="delivery_point" class="input" placeholder="Site, supply base, port or vessel agent" data-label="Delivery point" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="t-h3 text-ink">Your details</legend>
+            <div class="mt-6 grid gap-5 md:grid-cols-2">
+              <label class="field"><span>Full name</span><input name="name" class="input" required autocomplete="name" data-label="Name" /></label>
+              <label class="field"><span>Company</span><input name="company" class="input" required autocomplete="organization" data-label="Company" /></label>
+              <label class="field"><span>Work email</span><input name="email" type="email" class="input" required autocomplete="email" data-label="Email" /></label>
+              <label class="field"><span>Phone (optional)</span><input name="phone" type="tel" class="input" autocomplete="tel" data-label="Phone" /></label>
+              <label class="field md:col-span-2">
+                <span>Notes (optional)</span>
+                <textarea name="notes" rows="4" class="input" placeholder="Equipment tag, project number, urgency or anything else we should know" data-label="Notes"></textarea>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="border-t border-line pt-8">
+            <button type="submit" class="btn btn-primary px-7 py-4 text-[1rem]">
+              <Icon name="tabler:send" class="size-5" aria-hidden="true" />Send request
+            </button>
+            <p class="t-small mt-4 text-steel">By sending this request you agree to our <a href="/privacy/" class="link font-[500]">privacy policy</a>. We use your details only to reply to your request.</p>
+            <p data-form-status role="status" class="t-small mt-4"></p>
+          </div>
+        </form>
+
+        <div id="rfq-success" class="hidden rounded-[var(--radius-card)] border border-line bg-fog-2 p-10" tabindex="-1">
+          <Icon name="tabler:circle-check" class="size-10 text-ink" aria-hidden="true" />
+          <h2 class="t-h2 mt-5 text-ink">Request sent</h2>
+          <p class="t-lead mt-3 text-steel">Thank you. We have your request and aim to reply within {site.quoteResponse}. If it is urgent, email <a href={`mailto:${site.contact.salesEmail}`} class="link">{site.contact.salesEmail}</a>.</p>
+          <a href="/" class="btn btn-outline mt-7">Back to home</a>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-4">
+        <div class="grid gap-6 lg:sticky lg:top-28">
+          <div class="rounded-[var(--radius-card)] bg-ink p-7 text-white">
+            <h2 class="t-h3">What happens next</h2>
+            <ol class="mt-5 grid gap-4 text-[0.95rem] text-white/80">
+              <li class="grid grid-cols-[1.75rem_1fr]"><span class="tnum font-[600] text-signal">1</span>We confirm we have your request.</li>
+              <li class="grid grid-cols-[1.75rem_1fr]"><span class="tnum font-[600] text-signal">2</span>We check each line and ask if anything is unclear.</li>
+              <li class="grid grid-cols-[1.75rem_1fr]"><span class="tnum font-[600] text-signal">3</span>You receive one quote with price, lead time, origin and documents.</li>
+            </ol>
+          </div>
+          <div class="rounded-[var(--radius-card)] border border-line p-7">
+            <h2 class="t-h3 text-ink">Prefer email?</h2>
+            <p class="mt-2 text-steel">Send your list and photos directly.</p>
+            <a href={`mailto:${site.contact.salesEmail}?subject=${encodeURIComponent('Request for quote')}`} class="link mt-4 inline-block break-all">{site.contact.salesEmail}</a>
+            {site.contact.phone && <p class="mt-3 text-ink">{site.contact.phone}</p>}
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { initForm } from '../scripts/forms';
+
+  const form = document.getElementById('rfq-form') as HTMLFormElement;
+  const lines = document.getElementById('lines')!;
+  const addBtn = document.getElementById('add-line')!;
+  const template = lines.querySelector<HTMLElement>('[data-line]')!;
+
+  const refresh = () => {
+    const rows = lines.querySelectorAll<HTMLElement>('[data-line]');
+    rows.forEach((r, i) => {
+      const btn = r.querySelector<HTMLButtonElement>('.remove-line')!;
+      btn.hidden = rows.length === 1;
+      // Show labels on the first row only on wide screens
+      r.querySelectorAll('.field > span').forEach((s) => s.classList.toggle('md:sr-only', i > 0));
+    });
+  };
+
+  addBtn.addEventListener('click', () => {
+    const row = template.cloneNode(true) as HTMLElement;
+    row.querySelectorAll('input').forEach((inp) => (inp.value = inp.type === 'number' ? '1' : ''));
+    lines.appendChild(row);
+    refresh();
+    row.querySelector('input')?.focus();
+  });
+  lines.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.remove-line');
+    if (!btn) return;
+    btn.closest('[data-line]')?.remove();
+    refresh();
+  });
+
+  // Prefill from ?part= and ?category=
+  const params = new URLSearchParams(location.search);
+  const part = params.get('part');
+  const cat = params.get('category');
+  if (part) {
+    const looksLikeNumber = /\d/.test(part) && part.trim().split(/\s+/).length <= 2;
+    const target = template.querySelector<HTMLInputElement>(looksLikeNumber ? '[name="line_part[]"]' : '[name="line_desc[]"]');
+    if (target) target.value = part;
+  }
+  if (cat) {
+    const sel = form.querySelector<HTMLSelectElement>('[name="category"]');
+    if (sel) sel.value = cat;
+  }
+
+  initForm(form, {
+    to: form.dataset.to || '',
+    subject: (fd) => `Request for quote: ${fd.get('company') || ''}`.trim(),
+  });
+  refresh();
+</script>

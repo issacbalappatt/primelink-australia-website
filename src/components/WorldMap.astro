@@ -1,0 +1,87 @@
+---
+/**
+ * Dotted world map, generated at build time with `dotted-map`.
+ * The dots are drawn as one path (round line caps) to keep the HTML small.
+ */
+import DottedMap from 'dotted-map';
+import { origin, destinations } from '../data/regions';
+
+interface Props {
+  variant?: 'faint' | 'routes';
+  class?: string;
+}
+const { variant = 'routes', class: className = '' } = Astro.props;
+
+const map = new DottedMap({ height: 56, grid: 'diagonal' });
+const points = map.getPoints() as { x: number; y: number }[];
+const d = points.map((p) => `M${p.x} ${+p.y.toFixed(2)}h0`).join('');
+const W = 111;
+const H = 56;
+
+const o = map.getPin({ lat: origin.lat, lng: origin.lng });
+const pins = destinations.map((r) => ({ ...r, ...map.getPin({ lat: r.lat, lng: r.lng }) }));
+const arc = (x: number, y: number) => {
+  const mx = (o.x + x) / 2;
+  const my = (o.y + y) / 2;
+  const lift = Math.min(18, Math.hypot(o.x - x, o.y - y) * 0.32);
+  return `M${o.x} ${o.y} Q${mx} ${my - lift} ${x} ${y}`;
+};
+const faint = variant === 'faint';
+---
+
+<div class={className}>
+<div class="relative">
+  <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full" role="img" aria-label={faint ? 'World map' : `Map of shipping routes from ${origin.name} to ${destinations.length} oil and gas regions`}>
+    <path d={d} stroke={faint ? 'rgb(143 199 232 / 0.22)' : 'rgb(143 199 232 / 0.38)'} stroke-width="0.42" stroke-linecap="round" fill="none"></path>
+    {
+      !faint && (
+        <g fill="none" stroke-linecap="round">
+          {pins.map((p) => (
+            <path d={arc(p.x, p.y)} stroke="#8fc7e8" stroke-width="0.22" stroke-dasharray="0.8 0.7" />
+          ))}
+        </g>
+      )
+    }
+    {
+      !faint &&
+        pins.map((p) => (
+          <g>
+            <circle cx={p.x} cy={p.y} r="0.95" fill="#8fc7e8" opacity="0.25" />
+            <circle cx={p.x} cy={p.y} r="0.45" fill="#ffffff" />
+          </g>
+        ))
+    }
+    {
+      !faint && (
+        <g>
+          <circle cx={o.x} cy={o.y} r="2.2" fill="#ff5a1f" opacity="0.18" />
+          <circle cx={o.x} cy={o.y} r="0.85" fill="#ff5a1f" />
+        </g>
+      )
+    }
+  </svg>
+
+  {
+    !faint && (
+      <ul class="pointer-events-none absolute inset-0 hidden overflow-hidden md:block" aria-hidden="true">
+        {pins.map((p) => {
+          const pos = p.label ?? 'right';
+          const t =
+            pos === 'left' ? 'translate(calc(-100% - 0.9rem), -50%)' : pos === 'below' ? 'translate(-50%, 0.7rem)' : 'translate(0.9rem, -50%)';
+          return (
+            <li
+              class="absolute text-[0.78rem] font-[560] whitespace-nowrap text-white/85 [text-shadow:0_0_6px_#0c1e2b,0_0_3px_#0c1e2b,0_0_1px_#0c1e2b]"
+              style={`left:${(p.x / W) * 100}%;top:${(p.y / H) * 100}%;transform:${t}`}
+            >
+              {p.name}
+            </li>
+          );
+        })}
+        <li class="absolute text-[0.8rem] [text-shadow:0_0_6px_#0c1e2b] font-[650] whitespace-nowrap text-signal" style={`left:${(o.x / W) * 100}%;top:${(o.y / H) * 100}%;transform:translate(-50%, 1.1rem)`}>
+          {origin.name}
+        </li>
+      </ul>
+    )
+  }
+</div>
+</div>

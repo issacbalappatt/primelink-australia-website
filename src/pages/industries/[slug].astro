@@ -1,0 +1,93 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { industries, type Industry } from '../../data/industries';
+import { getCategory } from '../../data/products';
+
+export function getStaticPaths() {
+  return industries.map((i) => ({ params: { slug: i.slug }, props: { industry: i } }));
+}
+interface Props {
+  industry: Industry;
+}
+const { industry: i } = Astro.props;
+const cats = i.supply.map(getCategory).filter((c) => !!c);
+const others = industries.filter((o) => o.slug !== i.slug);
+---
+
+<Base title={i.name} description={`${i.short} Primelink Australia supplies HVAC spare parts with full documentation and delivery to site.`}>
+  <PageHero title={i.name} lead={i.short} crumbs={[{ label: 'Industries', href: '/industries/' }, { label: i.name }]} tone="dark" />
+
+  <section class="py-16 md:py-24">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="text-[1.3rem] leading-relaxed text-ink" style="font-stretch:102%">{i.intro}</p>
+      </div>
+      <div class="lg:col-span-4 lg:col-start-9">
+        <div class="rounded-[var(--radius-card)] border border-line p-7">
+          <h2 class="t-h3 text-ink">What we supply most often</h2>
+          <ul class="mt-5 grid gap-3">
+            {
+              i.focus.map((f) => (
+                <li class="flex gap-3 text-graphite">
+                  <Icon name="tabler:check" class="mt-0.5 size-5 shrink-0 text-signal" aria-hidden="true" />
+                  {f}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-fog py-16 md:py-24">
+    <div class="wrap">
+      <h2 class="t-h2 max-w-2xl text-ink">Site conditions we plan for</h2>
+      <div class="mt-12 grid gap-10 md:grid-cols-3">
+        {
+          i.conditions.map((c) => (
+            <div class="border-t-2 border-ink pt-6">
+              <h3 class="t-h3 text-ink">{c.title}</h3>
+              <p class="mt-3 text-steel">{c.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="wrap">
+      <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <h2 class="t-h2 text-ink">Parts for {i.name.toLowerCase()}</h2>
+        <a href="/products/" class="link">Full catalogue</a>
+      </div>
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        {cats.map((c) => <CategoryCard category={c!} examples={2} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-line py-14">
+    <div class="wrap">
+      <h2 class="t-label">Other industries</h2>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {
+          others.map((o) => (
+            <li>
+              <a href={`/industries/${o.slug}/`} class="inline-flex rounded-full border border-line px-4 py-2 text-[0.9rem] font-[560] text-ink hover:border-ink">
+                {o.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>

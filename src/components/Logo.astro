@@ -1,0 +1,21 @@
+---
+interface Props {
+  tone?: 'dark' | 'light';
+  class?: string;
+}
+const { tone = 'dark', class: className = '' } = Astro.props;
+const text = tone === 'dark' ? 'text-ink' : 'text-white';
+---
+
+<span class:list={['inline-flex items-center gap-2.5', text, className]}>
+  <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true" class="shrink-0">
+    <rect width="32" height="32" rx="5" fill={tone === 'dark' ? '#0c1e2b' : '#ffffff'}></rect>
+    <!-- Two linked bars: a supply link from source to site -->
+    <path d="M8 22.5V9.5h8.2a4.6 4.6 0 0 1 0 9.2H12" fill="none" stroke={tone === 'dark' ? '#ffffff' : '#0c1e2b'} stroke-width="2.6" stroke-linecap="square"></path>
+    <rect x="18.5" y="19.6" width="6" height="2.9" fill="#ff5a1f"></rect>
+  </svg>
+  <span class="leading-none">
+    <span class="block text-[1.12rem] font-[650] tracking-[-0.01em]" style="font-stretch:118%">PRIMELINK</span>
+    <span class="mt-[3px] block text-[0.66rem] font-medium tracking-[0.32em] opacity-70" style="font-stretch:110%">AUSTRALIA</span>
+  </span>
+</span>

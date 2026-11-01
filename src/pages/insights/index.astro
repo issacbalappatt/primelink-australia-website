@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import InsightCard from '../../components/InsightCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+const posts = (await getCollection('insights')).sort((a, b) => +b.data.date - +a.data.date);
+const [lead, ...rest] = posts;
+const leadDate = lead.data.date.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Base title="Insights" description="Practical guides on sourcing, specifying and shipping HVAC spare parts for oil and gas facilities.">
+  <PageHero title="Insights" lead="Practical guides for buyers, planners and engineers who keep HVAC systems running on oil and gas sites." crumbs={[{ label: 'Insights' }]} />
+
+  <section class="py-16 md:py-24">
+    <div class="wrap">
+      <a href={`/insights/${lead.id}/`} class="group blueprint-dark grid gap-8 rounded-[var(--radius-card)] p-8 text-white md:p-12 lg:grid-cols-12 lg:items-end">
+        <div class="lg:col-span-8">
+          <p class="t-small font-[560] text-air">Latest guide, {lead.data.topic.toLowerCase()}</p>
+          <h2 class="t-h2 mt-4 group-hover:underline group-hover:decoration-signal group-hover:decoration-2 group-hover:underline-offset-6">{lead.data.title}</h2>
+          <p class="t-lead mt-4 max-w-2xl text-white/70">{lead.data.description}</p>
+        </div>
+        <p class="t-small text-white/60 lg:col-span-4 lg:text-right">
+          <time datetime={lead.data.date.toISOString()}>{leadDate}</time>, {lead.data.minutes} min read
+        </p>
+      </a>
+
+      <div class="mt-16 grid gap-12 md:grid-cols-3">
+        {rest.map((p) => <InsightCard post={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
