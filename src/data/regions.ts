@@ -1,7 +1,7 @@
 /** Map origin. CONFIRM: move to the head office city when confirmed. */
 export const origin = { name: 'Australia', lat: -25.5, lng: 134.5 };
 
-/** Oil and gas regions shown on the map as delivery destinations. */
+/** Key energy, mining and industrial regions shown on the map as delivery destinations. */
 type LabelPos = 'right' | 'left' | 'below';
 export const destinations: { name: string; lat: number; lng: number; label?: LabelPos }[] = [
   { name: 'Singapore', lat: 1.35, lng: 103.8, label: 'left' as const },

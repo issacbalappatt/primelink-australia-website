@@ -5,13 +5,14 @@ import PageHero from '../../components/PageHero.astro';
 import CategoryCard from '../../components/CategoryCard.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { categories } from '../../data/products';
+import { equipment } from '../../data/equipment';
 
 const index = categories.flatMap((c) =>
   c.parts.map((p) => ({ part: p.name, note: p.note, cat: c.name, slug: c.slug })),
 );
 ---
 
-<Base title="Products" description="HVAC spare parts for oil and gas: compressors, coils, Ex-rated fans and motors, controls, refrigeration valves, dampers, filters and heaters.">
+<Base title="HVAC spare parts catalogue" description="HVAC and refrigeration spare parts: compressors, coils, Ex-rated fans and motors, controls, valves, dampers, filters and heaters, for packaged units, chillers, AHUs, cabinet coolers and more." keywords={['HVAC spare parts', 'chiller spare parts', 'packaged HVAC unit spares', 'cabinet cooler spares', 'Ex-rated fan motors']}>
   <PageHero
     title="HVAC spare parts catalogue"
     lead="Eight product families, from the original maker or a qualified alternative. Search by part type, or send us the part number."
@@ -41,6 +42,30 @@ const index = categories.flatMap((c) =>
   <section class="py-16 md:py-24">
     <div class="wrap grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {categories.map((c) => <CategoryCard category={c} examples={4} />)}
+    </div>
+  </section>
+
+  <section id="equipment" class="scroll-mt-28 border-t border-line py-16 md:py-24">
+    <div class="wrap">
+      <div class="max-w-2xl">
+        <h2 class="t-h2 text-ink">Equipment we support</h2>
+        <p class="t-lead mt-4 text-steel">We supply spare parts for these types of HVAC and refrigeration equipment, for safe areas and Zone 1 and Zone 2 hazardous areas.</p>
+      </div>
+      <ul class="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          equipment.map((e) => (
+            <li class="grid grid-cols-[auto_1fr] gap-4">
+              <span class="grid size-11 place-items-center rounded-[var(--radius-plate)] bg-fog text-ink">
+                <Icon name={e.icon} class="size-5" aria-hidden="true" />
+              </span>
+              <span>
+                <span class="block font-[620] text-ink">{e.name}</span>
+                <span class="t-small mt-1 block text-steel">{e.text}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 

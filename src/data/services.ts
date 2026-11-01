@@ -34,7 +34,7 @@ export const services: Service[] = [
     short: 'Equivalent parts for discontinued items, checked against the original data.',
     icon: 'tabler:arrows-exchange',
     intro:
-      'Many oil and gas facilities run HVAC equipment that is twenty or thirty years old. When the original part is no longer made, we find remaining stock or an engineered equivalent, and we document the differences so your engineers can approve the change.',
+      'Many plants, mines and offshore facilities run HVAC equipment that is twenty or thirty years old. When the original part is no longer made, we find remaining stock or an engineered equivalent, and we document the differences so your engineers can approve the change.',
     steps: [
       { title: 'Collect the data', text: 'Nameplates, drawings, datasheets and photos of the installed part.' },
       { title: 'Search for remaining stock', text: 'We check makers, distributors and surplus stock worldwide.' },
@@ -50,7 +50,7 @@ export const services: Service[] = [
   {
     slug: 'hazardous-area-supply',
     name: 'Hazardous-area (Ex) supply',
-    short: 'Ex-certified motors, heaters, actuators and instruments with matching certificates.',
+    short: 'ATEX and IECEx certified motors, compressors, heaters, actuators and instruments for Zone 1 and Zone 2.',
     icon: 'tabler:alert-triangle',
     intro:
       'An Ex part is only safe if it matches the area classification and its certificate matches the item. We check zone, gas group, temperature class and equipment protection level on every hazardous-area line before we quote.',
@@ -59,6 +59,8 @@ export const services: Service[] = [
       { title: 'Marking review', text: 'We review the Ex marking against your area classification before dispatch.' },
       { title: 'Complete records', text: 'Certificates of conformity and instructions travel with the part.' },
       { title: 'Australian requirements', text: 'We understand AS/NZS 60079 requirements for equipment used in Australia.' },
+      { title: 'Hydrogen and IIC areas', text: 'We source equipment rated for gas group IIC and IIB+H2 for hydrogen sites.' },
+      { title: 'Zone 1 and Zone 2', text: 'Parts for gas and dust hazardous areas, matched to the equipment protection level.' },
     ],
   },
   {

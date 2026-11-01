@@ -8,9 +8,9 @@ export const site = {
   name: 'Primelink Australia',
   legalName: 'Primelink Australia Pty Ltd', // CONFIRM legal entity name
   abn: '', // CONFIRM, for example '12 345 678 901'. Hidden when empty.
-  tagline: 'HVAC spare parts for the oil and gas industry',
+  tagline: 'HVAC spare parts for industry and hazardous areas',
   description:
-    'Primelink Australia supplies HVAC spare parts to oil and gas operators worldwide: compressors, coils, Ex-rated motors, dampers, controls and more, with full documentation and export logistics.',
+    'Primelink Australia supplies HVAC and refrigeration spare parts worldwide for oil and gas, mining, power, hydrogen, defence, telecoms and industry. Safe-area and Zone 1 hazardous-area parts, ATEX and IECEx, with full documentation.',
   url: 'https://www.primelinkaustralia.com.au', // CONFIRM domain
 
   contact: {

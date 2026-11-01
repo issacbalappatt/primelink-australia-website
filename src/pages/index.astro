@@ -12,6 +12,7 @@ import { categories } from '../data/products';
 import { industries } from '../data/industries';
 import { services } from '../data/services';
 import { destinations } from '../data/regions';
+import { equipment } from '../data/equipment';
 
 const posts = (await getCollection('insights')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
 
@@ -32,15 +33,15 @@ const docs = [
 ];
 ---
 
-<Base>
+<Base keywords={['HVAC spare parts', 'hazardous area HVAC parts', 'ATEX and IECEx certified parts', 'industrial HVAC parts']}>
   <!-- Hero -->
   <section class="blueprint-dark relative overflow-hidden text-white">
     <WorldMap variant="faint" class="pointer-events-none absolute top-1/2 -right-[18%] hidden w-[78%] -translate-y-1/2 lg:block" />
     <div class="wrap relative grid gap-12 pt-14 pb-16 md:pt-20 lg:grid-cols-12 lg:gap-10 lg:pt-24 lg:pb-24">
       <div class="lg:col-span-7">
-        <h1 class="t-display max-w-[14ch]">HVAC spare parts for oil and gas, delivered to site.</h1>
+        <h1 class="t-display max-w-[14ch]">HVAC spare parts for industry, delivered to site.</h1>
         <p class="t-lead mt-6 max-w-xl text-white/75">
-          Compressors, coils, Ex-rated motors, dampers and controls for offshore platforms, FPSOs, LNG plants and refineries. One supplier for every maker, with full documentation.
+          Compressors, coils, fans, controls and refrigeration parts for oil and gas, mining, power, hydrogen, defence and telecoms. Safe-area and Zone 1 hazardous-area parts, ATEX and IECEx certified, from one supplier with full documentation.
         </p>
 
         <form action="/request-a-quote/" method="get" class="mt-10 max-w-xl" role="search" aria-label="Request a quote by part number">
@@ -105,27 +106,21 @@ const docs = [
     </div>
   </section>
 
-  <!-- Industries -->
+  <!-- Equipment -->
   <section class="bg-fog py-20 md:py-28">
     <div class="wrap grid gap-12 lg:grid-cols-12">
       <div class="lg:col-span-4">
-        <div class="lg:sticky lg:top-32">
-          <h2 class="t-h2 text-ink">Built for sites where HVAC is safety equipment</h2>
-          <p class="t-lead mt-4 text-steel">On a platform or a gas plant, HVAC protects people and keeps hazardous gas out of control rooms. Our supply process starts from that fact.</p>
-          <a href="/industries/" class="link mt-6 inline-block">All industries</a>
-        </div>
+        <h2 class="t-h2 text-ink">Spares for every type of HVAC equipment</h2>
+        <p class="t-lead mt-4 text-steel">From packaged units on analyser houses to cold rooms in a remote camp. Send us the nameplate and we find the part.</p>
+        <a href="/products/#equipment" class="link mt-6 inline-block">Equipment we support</a>
       </div>
-      <ul class="border-t border-ink/15 lg:col-span-8">
+      <ul class="grid gap-px overflow-hidden rounded-[var(--radius-card)] border border-line bg-line sm:grid-cols-2 lg:col-span-8 lg:grid-cols-3">
         {
-          industries.map((i) => (
-            <li class="border-b border-ink/15">
-              <a href={`/industries/${i.slug}/`} class="group grid gap-2 py-6 md:grid-cols-[1fr_1.4fr_auto] md:items-center md:gap-8">
-                <span class="t-h3 text-ink">{i.name}</span>
-                <span class="text-[0.975rem] text-steel">{i.short}</span>
-                <span class="hidden size-10 place-items-center rounded-full border border-ink/20 text-ink transition-colors group-hover:border-signal group-hover:bg-signal md:grid">
-                  <Icon name="tabler:arrow-right" class="size-5" aria-hidden="true" />
-                </span>
-              </a>
+          equipment.map((e) => (
+            <li class="bg-white p-6">
+              <Icon name={e.icon} class="size-6 text-ink" stroke-width="1.5" aria-hidden="true" />
+              <h3 class="mt-4 font-[620] leading-snug text-ink">{e.name}</h3>
+              <p class="t-small mt-1.5 text-steel">{e.text}</p>
             </li>
           ))
         }
@@ -133,8 +128,47 @@ const docs = [
     </div>
   </section>
 
-  <!-- Process: a real sequence, so numbered -->
+  <!-- Industries -->
   <section class="py-20 md:py-28">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <div class="lg:sticky lg:top-32">
+          <h2 class="t-h2 text-ink">For sites where HVAC cannot fail</h2>
+          <p class="t-lead mt-4 text-steel">HVAC keeps gas out of control rooms, keeps batteries and servers cool, and keeps dangerous goods within their limits. We supply the parts for all of these sites, in safe areas and hazardous areas.</p>
+          <a href="/industries/" class="link mt-6 inline-block">All industries</a>
+        </div>
+      </div>
+      <div class="grid gap-x-10 gap-y-10 md:grid-cols-2 lg:col-span-8">
+        {
+          (['Energy and resources', 'Infrastructure and industry'] as const).map((g) => (
+            <div>
+              <h3 class="t-label border-b-2 border-ink pb-3">{g}</h3>
+              <ul>
+                {industries
+                  .filter((i) => i.group === g)
+                  .map((i) => (
+                    <li class="border-b border-ink/15">
+                      <a href={`/industries/${i.slug}/`} class="group flex items-center justify-between gap-4 py-4">
+                        <span>
+                          <span class="block text-[1.1rem] font-[600] text-ink" style="font-stretch:106%">{i.name}</span>
+                          <span class="t-small mt-0.5 block text-steel">{i.short}</span>
+                        </span>
+                        <span class="grid size-9 shrink-0 place-items-center rounded-full border border-ink/20 text-ink transition-colors group-hover:border-signal group-hover:bg-signal">
+                          <Icon name="tabler:arrow-right" class="size-4" aria-hidden="true" />
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Process: a real sequence, so numbered -->
+  <section class="border-t border-line py-20 md:py-28">
     <div class="wrap">
       <div class="max-w-2xl">
         <h2 class="t-h2 text-ink">How a request works</h2>
@@ -194,9 +228,9 @@ const docs = [
   <section class="bg-ink py-20 text-white md:py-28">
     <div class="wrap">
       <div class="grid gap-8 lg:grid-cols-12 lg:items-end">
-        <h2 class="t-h2 lg:col-span-6">From Australia to the world’s oil and gas regions</h2>
+        <h2 class="t-h2 lg:col-span-6">From Australia to industrial sites worldwide</h2>
         <p class="t-lead text-white/70 lg:col-span-5 lg:col-start-8">
-          Australia sits between the producing basins of Asia, the Middle East and the Pacific. We ship by air, sea and road to {destinations.length} regions and beyond.
+          Australia sits close to the energy, mining and industrial centres of Asia, the Middle East and the Pacific. We ship by air, sea and road to {destinations.length} key regions and beyond.
         </p>
       </div>
       <WorldMap class="mt-14" />

@@ -3,15 +3,17 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../config/site';
+import { withKeywords } from '../config/keywords';
 
 interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
   noindex?: boolean;
+  keywords?: string[];
 }
 
-const { title, description = site.description, ogImage = '/og-image.png', noindex = false } = Astro.props;
+const { title, description = site.description, ogImage = '/og-image.png', noindex = false, keywords = [] } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogUrl = new URL(ogImage, Astro.site ?? site.url).href;
@@ -28,6 +30,7 @@ const orgLd = {
   ...(site.contact.phone ? { telephone: site.contact.phone } : {}),
   address: { '@type': 'PostalAddress', addressCountry: 'AU' },
   areaServed: 'Worldwide',
+  knowsAbout: ['HVAC spare parts', 'Hazardous area HVAC', 'ATEX and IECEx equipment', 'Refrigeration spare parts', 'Industrial ventilation'],
   ...(site.contact.linkedin ? { sameAs: [site.contact.linkedin] } : {}),
 };
 ---
@@ -39,6 +42,7 @@ const orgLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={withKeywords(keywords)} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

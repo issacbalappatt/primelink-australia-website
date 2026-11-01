@@ -31,7 +31,7 @@ const faint = variant === 'faint';
 
 <div class={className}>
 <div class="relative">
-  <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full" role="img" aria-label={faint ? 'World map' : `Map of shipping routes from ${origin.name} to ${destinations.length} oil and gas regions`}>
+  <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full" role="img" aria-label={faint ? 'World map' : `Map of shipping routes from ${origin.name} to ${destinations.length} key regions`}>
     <path d={d} stroke={faint ? 'rgb(143 199 232 / 0.22)' : 'rgb(143 199 232 / 0.38)'} stroke-width="0.42" stroke-linecap="round" fill="none"></path>
     {
       !faint && (

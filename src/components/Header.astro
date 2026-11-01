@@ -13,7 +13,7 @@ const activeCompany = nav.company.some((c) => path.startsWith(c.href));
 
 <div class="bg-ink text-white/75">
   <div class="wrap flex h-9 items-center justify-between gap-6 text-[0.8125rem]">
-    <p class="hidden truncate sm:block">HVAC spare parts for oil and gas operators, shipped from Australia to sites worldwide</p>
+    <p class="hidden truncate sm:block">HVAC and refrigeration spare parts for industrial and hazardous-area sites, shipped from Australia worldwide</p>
     <div class="flex items-center gap-5">
       <a href={`mailto:${site.contact.salesEmail}`} class="inline-flex items-center gap-1.5 hover:text-white">
         <Icon name="tabler:mail" class="size-4" aria-hidden="true" />{site.contact.salesEmail}
@@ -95,19 +95,25 @@ const activeCompany = nav.company.some((c) => path.startsWith(c.href));
                       <div class="wrap grid grid-cols-12 gap-10 py-10">
                         <div class="col-span-3 border-r border-line pr-8">
                           <p class="t-h3 text-ink">Industries</p>
-                          <p class="t-small mt-2 text-steel">Parts for facilities where HVAC is safety equipment, not comfort equipment.</p>
+                          <p class="t-small mt-2 text-steel">Parts for sites where HVAC protects people, equipment and processes, from Zone 1 plants to data centres.</p>
                           <a href="/industries/" class="link mt-5 inline-block text-[0.95rem]">All industries</a>
                         </div>
-                        <ul class="col-span-9 grid grid-cols-3 gap-x-8 gap-y-6">
-                          {industries.map((i) => (
-                            <li>
-                              <a href={`/industries/${i.slug}/`} class="-m-3 block rounded-[var(--radius-card)] p-3 hover:bg-fog">
-                                <span class="block text-[0.95rem] font-[600] text-ink">{i.name}</span>
-                                <span class="t-small mt-1 block text-steel">{i.short}</span>
-                              </a>
-                            </li>
+                        <div class="col-span-9 grid grid-cols-2 gap-x-10">
+                          {['Energy and resources', 'Infrastructure and industry'].map((g) => (
+                            <div>
+                              <p class="t-label border-b border-line pb-2">{g}</p>
+                              <ul class="mt-2 grid gap-0.5">
+                                {industries.filter((i) => i.group === g).map((i) => (
+                                  <li>
+                                    <a href={`/industries/${i.slug}/`} class="-mx-3 block rounded-[var(--radius-btn)] px-3 py-2 text-[0.95rem] font-[560] text-ink hover:bg-fog">
+                                      {i.name}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
                           ))}
-                        </ul>
+                        </div>
                       </div>
                     )}
 

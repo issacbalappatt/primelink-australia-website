@@ -5,21 +5,26 @@ import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { industries } from '../../data/industries';
 import { getCategory } from '../../data/products';
+import { applications } from '../../data/equipment';
+const groups = ['Energy and resources', 'Infrastructure and industry'] as const;
 ---
 
-<Base title="Industries" description="HVAC spare parts for offshore platforms, FPSOs, LNG and gas processing, refineries, mining and power generation.">
+<Base title="Industries" description="HVAC spare parts for oil and gas, LNG, mining, power, hydrogen and renewables, chemical, defence, telecoms, data centres, water and manufacturing." keywords={['industrial HVAC parts', 'hazardous area HVAC parts', 'offshore HVAC spares', 'data centre cooling spares']}>
   <PageHero
     title="Industries we supply"
-    lead="Oil and gas facilities depend on HVAC to protect people, keep gas out of safe areas and cool critical equipment. We understand the conditions on each type of site."
+    lead="From Zone 1 gas plants to data centres and cold stores, HVAC protects people, equipment and processes. We understand the conditions on each type of site."
     crumbs={[{ label: 'Industries' }]}
   />
 
-  <section class="py-16 md:py-24">
-    <div class="wrap grid gap-px overflow-hidden rounded-[var(--radius-card)] border border-line bg-line md:grid-cols-2">
+  {groups.map((g) => (
+  <section class="pt-16 md:pt-20 last-of-type:pb-16">
+    <h2 class="wrap t-h3 text-ink">{g}</h2>
+    <div class="wrap mt-6">
+    <div class="grid gap-px overflow-hidden rounded-[var(--radius-card)] border border-line bg-line md:grid-cols-2">
       {
-        industries.map((i) => (
-          <a href={`/industries/${i.slug}/`} class="group flex flex-col bg-white p-8 hover:bg-fog-2 md:p-10">
-            <h2 class="t-h2 text-ink">{i.name}</h2>
+        industries.filter((i) => i.group === g).map((i) => (
+          <a href={`/industries/${i.slug}/`} class="group flex flex-col bg-white p-8 hover:bg-fog-2 md:p-10 md:last:odd:col-span-2">
+            <h3 class="t-h2 text-ink">{i.name}</h3>
             <p class="mt-3 max-w-md text-steel">{i.short}</p>
             <ul class="mt-6 flex flex-wrap gap-2">
               {i.supply.slice(0, 4).map((s) => (
@@ -27,12 +32,26 @@ import { getCategory } from '../../data/products';
               ))}
             </ul>
             <span class="mt-auto flex items-center gap-1.5 pt-8 text-[0.95rem] font-[600] text-ink">
-              See how we support {i.name.toLowerCase()}
+              Parts and site conditions
               <Icon name="tabler:arrow-right" class="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
             </span>
           </a>
         ))
       }
+    </div>
+    </div>
+  </section>
+  ))}
+
+  <section class="mt-16 border-y border-line bg-fog py-16 md:mt-24 md:py-20">
+    <div class="wrap grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <h2 class="t-h2 text-ink">Applications</h2>
+        <p class="mt-4 text-steel">The buildings and spaces we supply HVAC parts for, across every industry.</p>
+      </div>
+      <ul class="flex flex-wrap content-start gap-2 lg:col-span-8">
+        {applications.map((a) => <li class="rounded-full border border-line bg-white px-4 py-2 text-[0.925rem] font-[560] text-ink">{a}</li>)}
+      </ul>
     </div>
   </section>
 

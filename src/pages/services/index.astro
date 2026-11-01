@@ -4,9 +4,10 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { services } from '../../data/services';
+import { midSentence } from '../../utils/text';
 ---
 
-<Base title="Services" description="Global sourcing, obsolete part replacement, hazardous-area supply, shutdown support, export logistics and spares programmes for HVAC in oil and gas.">
+<Base title="Services" description="Global sourcing, obsolete part replacement, ATEX and IECEx hazardous-area supply, shutdown support, export logistics and recommended spares lists for HVAC equipment.">
   <PageHero
     title="Services"
     lead="We do more than supply a part. We find it, check it, document it and deliver it to a site that may be hundreds of kilometres offshore."
@@ -23,7 +24,7 @@ import { services } from '../../data/services';
               <h2 class="t-h2 mt-5 text-ink">{s.name}</h2>
               <p class="t-lead mt-4 text-steel">{s.short}</p>
               <a href={`/services/${s.slug}/`} class="btn btn-outline mt-7">
-                About {s.name.toLowerCase()}
+                About {midSentence(s.name)}
               </a>
             </div>
             <ul class="grid content-start gap-6 sm:grid-cols-2 lg:col-span-6 lg:col-start-7">

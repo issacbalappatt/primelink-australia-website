@@ -1,6 +1,6 @@
 # Primelink Australia — Website
 
-Marketing and quote-request website for Primelink Australia, an international supplier of HVAC spare parts for the oil and gas industry.
+Marketing and quote-request website for Primelink Australia, an international supplier of HVAC and refrigeration spare parts for industrial and hazardous-area sites (oil and gas, mining, power, hydrogen, defence, telecoms, data centres and manufacturing).
 
 Built with [Astro](https://astro.build) and [Tailwind CSS v4](https://tailwindcss.com). The output is a fully static site, so you can host it anywhere (Cloudflare Pages, Netlify, Vercel, GitHub Pages or any web server).
 
@@ -28,6 +28,8 @@ All company data is in **`src/config/site.ts`**. Every value marked `CONFIRM` is
 | `certifications` | Certificates you hold (for example `ISO 9001:2015`). Badges show only when this list has entries |
 | `platforms` | Equipment makes listed on the home page |
 
+SEO keywords are in `src/config/keywords.ts` (site-wide list). Pages add their own terms through the `keywords` prop on `Base.astro`. The terms are generic industry phrases; no competitor brand names are used.
+
 Also check:
 
 - `src/data/regions.ts` – map origin (move to head office city) and the regions you ship to.
@@ -47,7 +49,8 @@ By default, the forms open the visitor's email app with the request filled in. T
 | Content | File |
 | --- | --- |
 | Product families and typical parts | `src/data/products.ts` |
-| Industries | `src/data/industries.ts` |
+| Industries (grouped: energy and resources, infrastructure and industry) | `src/data/industries.ts` |
+| Equipment types and applications | `src/data/equipment.ts` |
 | Services | `src/data/services.ts` |
 | Insights articles | `src/content/insights/*.md` (add a new `.md` file to publish an article) |
 | Navigation | `src/config/site.ts` (`nav`) |
@@ -85,7 +88,7 @@ public/         favicon, Open Graph image, robots.txt
 
 ## Built-in features
 
-- 38 pages: home, product catalogue with part search, 8 product family pages, 6 industry pages, 6 service pages, quality, about, global reach, insights, careers, quote request, contact, privacy, terms, 404
+- 44 pages: home, product catalogue with part search, 8 product family pages, 12 industry pages, 6 service pages, quality, about, global reach, insights, careers, quote request, contact, privacy, terms, 404
 - Multi-line quote form with prefill from `?part=` and `?category=`, document requirements and attachments
 - Mega menu on desktop, accessible drawer menu on mobile
 - Dotted world map generated at build time (no external requests)

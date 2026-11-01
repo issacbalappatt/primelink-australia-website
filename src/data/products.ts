@@ -25,6 +25,7 @@ export const categories: ProductCategory[] = [
       'A failed compressor stops a whole HVAC system. We source complete replacement compressors and the service parts for overhaul, for semi-hermetic, hermetic and open-drive units on offshore and onshore plant.',
     parts: [
       { name: 'Semi-hermetic reciprocating compressors', note: 'Like-for-like or approved equivalent' },
+      { name: 'Ex d certified hermetic compressors', note: 'For Zone 1 packaged units and chillers' },
       { name: 'Scroll and tandem scroll compressors', note: 'Single units and manifolded sets' },
       { name: 'Screw compressors', note: 'Complete units and rotor sets' },
       { name: 'Valve plates and gasket sets', note: 'Overhaul kits by model and serial' },
@@ -46,7 +47,7 @@ export const categories: ProductCategory[] = [
       'Salt air and hydrocarbon atmospheres attack fin stock fast. We supply replacement coils built to the original geometry, with the material and coating you specify for marine and process environments.',
     parts: [
       { name: 'Direct expansion (DX) evaporator coils', note: 'Built to original dimensions and circuiting' },
-      { name: 'Chilled water and hot water coils', note: 'Copper, cupronickel or stainless tube' },
+      { name: 'Chilled water and hot water coils', note: 'Copper, cupronickel or SS316 tube' },
       { name: 'Condenser coils', note: 'Air-cooled, with protective coatings' },
       { name: 'Brazed plate heat exchangers', note: 'Refrigerant and water applications' },
       { name: 'Shell-and-tube heat exchangers', note: 'Condensers, evaporators and oil coolers' },
@@ -65,6 +66,7 @@ export const categories: ProductCategory[] = [
       'Air movement is the core of every HVAC system on a platform or plant. We supply fans and motors for safe and hazardous areas, matched to frame size, mounting, speed and certification.',
     parts: [
       { name: 'Axial and centrifugal fans', note: 'Impellers, complete fan sets and housings' },
+      { name: 'Non-sparking direct-drive fans', note: 'For hazardous-area condensers and evaporators' },
       { name: 'EC fans and EC motor retrofits', note: 'For energy and control upgrades' },
       { name: 'Ex d, Ex db and Ex eb motors', note: 'Gas groups IIA to IIC, T1 to T6' },
       { name: 'Safe-area IE3 and IE4 motors', note: 'IEC and NEMA frames' },
@@ -85,6 +87,7 @@ export const categories: ProductCategory[] = [
       'Control parts go obsolete faster than mechanical parts. We find the original item, or an equivalent that fits the existing panel and wiring, and confirm the configuration with you before we ship.',
     parts: [
       { name: 'HVAC controllers and I/O modules', note: 'Original or approved replacement' },
+      { name: 'Cabinet cooler and sample chiller controls', note: 'Thermostats, controllers and Ex switches' },
       { name: 'Temperature and humidity sensors', note: 'Duct, room and immersion types' },
       { name: 'Pressure and differential pressure transmitters', note: 'Including Ex i and Ex d versions' },
       { name: 'Pressure switches and pressostats', note: 'High, low and dual pressure' },
@@ -167,7 +170,7 @@ export const categories: ProductCategory[] = [
       { name: 'Heating elements', note: 'Replacement elements for existing heater banks' },
       { name: 'Thermal cut-outs and limit thermostats', note: 'Manual and automatic reset' },
       { name: 'Contactors, relays and overloads', note: 'For HVAC motor control centres' },
-      { name: 'Ex e and Ex d enclosures', note: 'Junction boxes and control stations' },
+      { name: 'Ex e and Ex d enclosures', note: 'Junction boxes and control stations, SS304 and SS316 options' },
       { name: 'Cable glands and accessories', note: 'Ex-certified, matched to cable type' },
       { name: 'Isolators and local control stations', note: 'Safe-area and Ex' },
     ],

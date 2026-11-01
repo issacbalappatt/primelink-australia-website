@@ -6,6 +6,7 @@ import CtaBand from '../../components/CtaBand.astro';
 import { categories, type ProductCategory } from '../../data/products';
 import { industries } from '../../data/industries';
 import { site } from '../../config/site';
+import { midSentence } from '../../utils/text';
 
 export function getStaticPaths() {
   return categories.map((c) => ({ params: { slug: c.slug }, props: { category: c } }));
@@ -19,7 +20,7 @@ const usedIn = industries.filter((i) => i.supply.includes(c.slug));
 const others = categories.filter((o) => o.slug !== c.slug);
 ---
 
-<Base title={c.name} description={`${c.short} Supplied to oil and gas operators worldwide by Primelink Australia.`}>
+<Base title={c.name} description={`${c.short} Safe-area and hazardous-area (ATEX and IECEx) parts, supplied worldwide by Primelink Australia.`} keywords={[c.name, ...c.parts.slice(0, 5).map((p) => p.name)]}>
   <section class="border-b border-line bg-fog-2">
     <div class="wrap pt-10 pb-14 md:pb-20">
       <Breadcrumbs items={[{ label: 'Products', href: '/products/' }, { label: c.name }]} />
@@ -153,5 +154,5 @@ const others = categories.filter((o) => o.slug !== c.slug);
     </div>
   </section>
 
-  <CtaBand title={`Need ${c.name.toLowerCase()}?`} />
+  <CtaBand title={`Need ${midSentence(c.name)}?`} />
 </Base>

@@ -15,7 +15,7 @@ const { service: s } = Astro.props;
 const others = services.filter((o) => o.slug !== s.slug);
 ---
 
-<Base title={s.name} description={`${s.short} HVAC spare parts services for oil and gas from Primelink Australia.`}>
+<Base title={s.name} description={`${s.short} HVAC and refrigeration spare parts services from Primelink Australia.`} keywords={[s.name, 'HVAC spare parts', 'recommended spares lists']}>
   <PageHero title={s.name} lead={s.short} crumbs={[{ label: 'Services', href: '/services/' }, { label: s.name }]} />
 
   <section class="py-16 md:py-24">
