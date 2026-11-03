@@ -7,9 +7,9 @@ import icon from 'astro-icon';
 // canonical URLs and Open Graph tags.
 export default defineConfig({
   site: 'https://www.primelinkaustralia.com.au',
-  trailingSlash: 'ignore',
+  trailingSlash: 'always',
   integrations: [
-    sitemap(),
+    sitemap({ filter: (page) => !page.endsWith('/404/') }),
     icon({
       include: { tabler: ['*'] },
     }),

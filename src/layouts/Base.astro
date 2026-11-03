@@ -11,18 +11,21 @@ interface Props {
   ogImage?: string;
   noindex?: boolean;
   keywords?: string[];
+  ogType?: 'website' | 'article';
 }
 
-const { title, description = site.description, ogImage = '/og-image.png', noindex = false, keywords = [] } = Astro.props;
+const { title, description = site.description, ogImage = '/og-image.png', noindex = false, keywords = [], ogType = 'website' } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.tagline}`;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const canonicalPath = Astro.url.pathname === '/' ? '/' : `${Astro.url.pathname.replace(/\/+$/, '')}/`;
+const canonical = new URL(canonicalPath, Astro.site ?? site.url).href;
 const ogUrl = new URL(ogImage, Astro.site ?? site.url).href;
 
 const orgLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': `${site.url}/#organization`,
   name: site.name,
-  legalName: site.legalName,
+
   url: site.url,
   logo: new URL('/favicon.svg', site.url).href,
   description: site.description,
@@ -30,6 +33,7 @@ const orgLd = {
   ...(site.contact.phone ? { telephone: site.contact.phone } : {}),
   address: { '@type': 'PostalAddress', addressCountry: 'AU' },
   areaServed: 'Worldwide',
+  contactPoint: { '@type': 'ContactPoint', email: site.contact.generalEmail, contactType: 'customer service', availableLanguage: 'English' },
   knowsAbout: ['HVAC spare parts', 'Hazardous area HVAC', 'ATEX and IECEx equipment', 'Refrigeration spare parts', 'Industrial ventilation'],
   ...(site.contact.linkedin ? { sameAs: [site.contact.linkedin] } : {}),
 };
@@ -44,20 +48,30 @@ const orgLd = {
     <meta name="description" content={description} />
     <meta name="keywords" content={withKeywords(keywords)} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#0c1e2b" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:alt" content="Primelink Australia HVAC and refrigeration spare parts" />
     <meta property="og:locale" content="en_AU" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
 
     <script type="application/ld+json" set:html={JSON.stringify(orgLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'WebSite',
+      '@id': `${site.url}/#website`, url: site.url, name: site.name,
+      inLanguage: 'en-AU', publisher: { '@id': `${site.url}/#organization` },
+    })} />
     <slot name="head" />
   </head>
   <body class="min-h-screen bg-white">

@@ -23,13 +23,15 @@ const ld = {
   '@type': 'Article',
   headline: post.data.title,
   description: post.data.description,
+  image: new URL('/og-image.png', site.url).href,
+  mainEntityOfPage: new URL(`/insights/${post.id}/`, site.url).href,
   datePublished: post.data.date.toISOString(),
   author: { '@type': 'Organization', name: site.name },
-  publisher: { '@type': 'Organization', name: site.name },
+  publisher: { '@id': `${site.url}/#organization` },
 };
 ---
 
-<Base title={post.data.title} description={post.data.description}>
+<Base ogType="article" title={post.data.title} description={post.data.description}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
   <article>
     <header class="border-b border-line bg-fog-2">

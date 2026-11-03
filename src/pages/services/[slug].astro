@@ -3,6 +3,7 @@ import { Icon } from 'astro-icon/components';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import { site } from '../../config/site';
 import { services, type Service } from '../../data/services';
 
 export function getStaticPaths() {
@@ -16,6 +17,12 @@ const others = services.filter((o) => o.slug !== s.slug);
 ---
 
 <Base title={s.name} description={`${s.short} HVAC and refrigeration spare parts services from Primelink Australia.`} keywords={[s.name, 'HVAC spare parts', 'recommended spares lists']}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'Service',
+    name: s.name, description: s.intro,
+    url: new URL(`/services/${s.slug}/`, site.url).href,
+    provider: { '@id': `${site.url}/#organization` }, areaServed: 'Worldwide',
+  })} />
   <PageHero title={s.name} lead={s.short} crumbs={[{ label: 'Services', href: '/services/' }, { label: s.name }]} />
 
   <section class="py-16 md:py-24">

@@ -38,7 +38,7 @@ export const site = {
    * (Formspree, Web3Forms, Basin, a Cloudflare Worker, etc.). When it is not
    * set, the forms open the visitor's email app with the request filled in.
    */
-  formEndpoint: import.meta.env.PUBLIC_FORM_ENDPOINT ?? '',
+  formEndpoint: import.meta.env.PUBLIC_FORM_ENDPOINT || '/api/enquiry',
 };
 
 /** Equipment makes we source parts for. Text only, no logos. CONFIRM list. */

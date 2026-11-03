@@ -1,75 +1,57 @@
 /**
- * Shared form handler for the quote and contact forms.
- *
- * - If the form has a data-endpoint (from PUBLIC_FORM_ENDPOINT), the form is
- *   posted there as multipart form data (attachments included).
- * - If not, the request is turned into an email and opened in the visitor's
- *   email app, so no request is lost before a form service is set up.
+ * Both enquiry forms submit to the same server endpoint.
+ * Never show success until the server confirms Resend accepted the email.
  */
 export function initForm(form: HTMLFormElement, opts: { subject: (fd: FormData) => string; to: string }) {
   const status = form.querySelector<HTMLElement>('[data-form-status]');
   const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
   const success = document.getElementById(form.dataset.success || '');
+  let pending = false;
+  let submissionId = crypto.randomUUID();
+  form.addEventListener('input', () => { submissionId = crypto.randomUUID(); });
 
-  const setStatus = (msg: string, kind: 'error' | 'info') => {
-    if (!status) return;
-    status.textContent = msg;
-    status.className = `t-small mt-4 ${kind === 'error' ? 'text-[#b42318]' : 'text-steel'}`;
-  };
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!form.reportValidity()) return;
-
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (pending || !form.reportValidity()) return;
     const fd = new FormData(form);
-    if (fd.get('company_website')) return; // spam trap
-
-    const endpoint = form.dataset.endpoint;
-    if (endpoint) {
-      button?.setAttribute('disabled', '');
-      setStatus('Sending your request…', 'info');
-      try {
-        const res = await fetch(endpoint, { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
-        if (!res.ok) throw new Error(String(res.status));
-        form.classList.add('hidden');
-        success?.classList.remove('hidden');
-        success?.focus();
-      } catch {
-        setStatus(`The request did not send. Check your connection and try again, or email ${opts.to}.`, 'error');
-      } finally {
-        button?.removeAttribute('disabled');
-      }
+    fd.set('submission_id', submissionId);
+    const files = Array.from(fd.values()).filter((v): v is File => v instanceof File && v.size > 0);
+    const setStatus = (message: string) => { if (status) status.textContent = message; };
+    if (files.length > 5 || files.reduce((sum, file) => sum + file.size, 0) > 10 * 1024 * 1024) {
+      setStatus('Please attach up to 5 files with a combined size of 10 MB or less.');
       return;
     }
-
-    // Email fallback
-    const lines: string[] = [];
-    const seen = new Set<string>();
-    for (const [key, value] of fd.entries()) {
-      if (value instanceof File || key === 'company_website') continue;
-      const label = form.querySelector(`[name="${CSS.escape(key)}"]`)?.getAttribute('data-label') || key;
-      const v = String(value).trim();
-      if (!v) continue;
-      if (key.startsWith('line_')) continue;
-      if (seen.has(key)) {
-        lines[lines.length - 1] += `, ${v}`;
-        continue;
+    form.querySelector('[data-email-fallback]')?.remove();
+    pending = true;
+    button?.setAttribute('disabled', '');
+    form.setAttribute('aria-busy', 'true');
+    setStatus('Sending your request...');
+    try {
+      const response = await fetch(form.dataset.endpoint || '/api/enquiry', {
+        method: 'POST', body: fd, headers: { Accept: 'application/json' },
+      });
+      const data = await response.json();
+      if (!response.ok || data.success !== true) {
+        throw new Error(data.error || 'Your request could not be sent. Please try again.');
       }
-      seen.add(key);
-      lines.push(`${label}: ${v}`);
+      form.classList.add('hidden');
+      success?.classList.remove('hidden');
+      success?.focus();
+    } catch (error) {
+      setStatus(`${error instanceof Error ? error.message : 'Your request could not be sent.'} Your details are still here. You can also email ${opts.to}.`);
+      const text = Array.from(fd.entries())
+        .filter(([key, value]) => typeof value === 'string' && !['company_website', 'submission_id'].includes(key))
+        .map(([key, value]) => `${key}: ${value}`).join('\n');
+      const fallback = document.createElement('a');
+      fallback.dataset.emailFallback = '';
+      fallback.className = 'link mt-3 inline-block';
+      fallback.textContent = files.length ? 'Send via email instead (attach your files manually)' : 'Send via email instead';
+      fallback.href = `mailto:${opts.to}?subject=${encodeURIComponent(opts.subject(fd))}&body=${encodeURIComponent(text)}`;
+      status?.insertAdjacentElement('afterend', fallback);
+    } finally {
+      pending = false;
+      form.removeAttribute('aria-busy');
+      button?.removeAttribute('disabled');
     }
-    const items = Array.from(form.querySelectorAll<HTMLElement>('[data-line]'))
-      .map((row, i) => {
-        const get = (n: string) => (row.querySelector<HTMLInputElement>(`[name^="line_${n}"]`)?.value || '').trim();
-        const part = get('part');
-        const desc = get('desc');
-        if (!part && !desc) return '';
-        return `${i + 1}. ${[part, get('maker'), desc].filter(Boolean).join(' | ')}  x ${get('qty') || '1'}`;
-      })
-      .filter(Boolean);
-    const body = [...(items.length ? ['Items:', ...items, ''] : []), ...lines].join('\n');
-    const hasFiles = Array.from(fd.values()).some((v) => v instanceof File && v.size > 0);
-    window.location.href = `mailto:${opts.to}?subject=${encodeURIComponent(opts.subject(fd))}&body=${encodeURIComponent(body + (hasFiles ? '\n\n(Please attach your files to this email.)' : ''))}`;
-    setStatus('Your email app should open with the request filled in. Send the email to complete the request.', 'info');
   });
 }

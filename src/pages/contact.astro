@@ -51,8 +51,9 @@ const channels = [
       </div>
 
       <div class="lg:col-span-6 lg:col-start-7">
-        <form id="contact-form" class="grid gap-5 rounded-[var(--radius-card)] border border-line p-6 md:p-8" data-endpoint={site.formEndpoint || undefined} data-success="contact-success" data-to={site.contact.generalEmail}>
+        <form action="/api/enquiry" method="post" enctype="multipart/form-data" id="contact-form" class="grid gap-5 rounded-[var(--radius-card)] border border-line p-6 md:p-8" data-endpoint={site.formEndpoint || undefined} data-success="contact-success" data-to={site.contact.generalEmail}>
           <h2 class="t-h3 text-ink">Send a message</h2>
+          <noscript><p>Please enable JavaScript to submit this form, or email us using the address on this page.</p></noscript>
           <input type="hidden" name="form" value="Contact" />
           <div class="hidden" aria-hidden="true"><label>Leave empty <input name="company_website" tabindex="-1" autocomplete="off" /></label></div>
           <div class="grid gap-5 md:grid-cols-2">
